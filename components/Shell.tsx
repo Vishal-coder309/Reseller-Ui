@@ -19,6 +19,7 @@ interface NavItem { href: string; label: string; icon: string; }
 const NAV: NavItem[] = [
   { href: "/", label: "Dashboard", icon: "ph-gauge" },
   { href: "/user-list", label: "Users", icon: "ph-users-three" },
+  { href: "/hierarchy", label: "Hierarchy", icon: "ph-tree-structure" },
   { href: "/campaigns", label: "Campaigns", icon: "ph-broadcast" },
   { href: "/plans", label: "Plans", icon: "ph-cards" },
   { href: "/reports", label: "Summary Reports", icon: "ph-chart-bar" },

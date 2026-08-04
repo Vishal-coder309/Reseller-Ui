@@ -200,7 +200,7 @@ export const users: User[] = [
     id: 5004, username: "shopmate", name: "Neha Gupta", email: "neha@shopmate.in", mobile: "98xxxxxx24",
     company: "ShopMate", address: "22 Park St", pincode: "700016", location: ["Kolkata"],
     group: ["Retail"], module: ["Custom IVR"], accountType: "Promotional", type: "user",
-    voiceBalance: 0, voicePlanId: 103, ttsBalance: 5, ttsPlanId: 201, parent: "DEMO_OPERATOR",
+    voiceBalance: 0, voicePlanId: 103, ttsBalance: 5, ttsPlanId: 201, parent: "loanhub",
     expiry: "2026-06-30", createdAt: "2026-01-05", planType: "Prepaid", status: "Validity Expired", clis: [],
   },
   {
@@ -214,8 +214,36 @@ export const users: User[] = [
     id: 5006, username: "eduwave", name: "Priya Nair", email: "priya@eduwave.in", mobile: "98xxxxxx26",
     company: "EduWave", address: "3 FC Road", pincode: "411004", location: ["Pune"],
     group: ["Education"], module: ["SMS Webhooks"], accountType: "Promotional", type: "user",
-    voiceBalance: 75, voicePlanId: 101, ttsBalance: 22, ttsPlanId: 201, parent: "DEMO_OPERATOR",
+    voiceBalance: 75, voicePlanId: 101, ttsBalance: 22, ttsPlanId: 201, parent: "loanhub",
     expiry: "2026-08-01", createdAt: "2026-04-09", planType: "Prepaid", status: "Active", clis: ["02040000006"],
+  },
+  {
+    id: 5007, username: "microfin", name: "Sneha Kulkarni", email: "sneha@microfin.in", mobile: "98xxxxxx27",
+    company: "MicroFin Services", address: "14 JM Road", pincode: "411005", location: ["Pune"],
+    group: ["Finance"], module: ["Custom IVR", "Webhooks"], accountType: "Promotional", type: "reseller",
+    voiceBalance: 450, voicePlanId: 101, ttsBalance: 0, ttsPlanId: 201, parent: "loanhub",
+    expiry: "2027-01-15", createdAt: "2026-02-20", planType: "Postpaid", status: "Active", clis: ["01140000011"],
+  },
+  {
+    id: 5008, username: "quickpay", name: "Arjun Das", email: "arjun@quickpay.in", mobile: "98xxxxxx28",
+    company: "QuickPay Collect", address: "7 Salt Lake", pincode: "700064", location: ["Kolkata"],
+    group: ["Finance"], module: ["Custom IVR"], accountType: "Promotional", type: "user",
+    voiceBalance: 60, voicePlanId: 102, ttsBalance: 0, ttsPlanId: 201, parent: "microfin",
+    expiry: "2026-10-10", createdAt: "2026-05-02", planType: "Prepaid", status: "Active", clis: [],
+  },
+  {
+    id: 5009, username: "citycalls", name: "Meera Iyer", email: "meera@citycalls.in", mobile: "98xxxxxx29",
+    company: "CityCalls Media", address: "31 Anna Nagar", pincode: "600040", location: ["Chennai"],
+    group: ["Media"], module: ["Custom IVR", "SMS Webhooks"], accountType: "Promotional", type: "reseller",
+    voiceBalance: 700, voicePlanId: 101, ttsBalance: 0, ttsPlanId: 201, parent: "DEMO_OPERATOR",
+    expiry: "2027-02-28", createdAt: "2026-01-30", planType: "Postpaid", status: "Active", clis: ["03340000012"],
+  },
+  {
+    id: 5010, username: "metrovoice", name: "Karan Mehta", email: "karan@metrovoice.in", mobile: "98xxxxxx30",
+    company: "MetroVoice Ads", address: "12 CP Block", pincode: "110001", location: ["Delhi"],
+    group: ["Media"], module: ["Custom IVR"], accountType: "Promotional", type: "user",
+    voiceBalance: 95, voicePlanId: 102, ttsBalance: 0, ttsPlanId: 201, parent: "citycalls",
+    expiry: "2026-12-01", createdAt: "2026-06-12", planType: "Prepaid", status: "Active", clis: [],
   },
 ];
 
