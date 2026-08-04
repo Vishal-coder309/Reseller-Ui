@@ -128,7 +128,6 @@ export function CampaignSummary({ kind, userWise }: { kind: "live" | "prompt"; u
                           {c.status === "running" && (<button className="btn btn-ghost" onClick={() => setCampaignStatus(c, "paused")} style={{ width: "100%", margin: 0, justifyContent: "flex-start", borderRadius: 0 }}><i className="ph-duotone ph-pause" style={{ fontSize: 16 }} /> Pause</button>)}
                           {c.status === "paused" && (<button className="btn btn-ghost" onClick={() => setCampaignStatus(c, "running")} style={{ width: "100%", margin: 0, justifyContent: "flex-start", borderRadius: 0 }}><i className="ph-duotone ph-play" style={{ fontSize: 16 }} /> Resume</button>)}
                           {(c.status === "running" || c.status === "paused" || c.status === "scheduled") && (<button className="btn btn-ghost" onClick={() => { if (window.confirm(`Stop "${c.name}"? This ends the campaign and cannot be undone.`)) setCampaignStatus(c, "complete"); }} style={{ width: "100%", margin: 0, justifyContent: "flex-start", borderRadius: 0, color: "var(--color-accent-2-700)" }}><i className="ph-duotone ph-stop" style={{ fontSize: 16 }} /> Stop</button>)}
-                          <button className="btn btn-ghost" onClick={() => { setMenu(null); setToast(`Report for "${c.name}" will be available in the Reports Section.`); }} style={{ width: "100%", margin: 0, justifyContent: "flex-start", borderRadius: 0 }}><i className="ph-duotone ph-file-arrow-down" style={{ fontSize: 16 }} /> Full Report</button>
                           <a href={`/campaigns/${c.id}`} className="btn btn-ghost" style={{ width: "100%", margin: 0, justifyContent: "flex-start", borderRadius: 0 }}><i className="ph-duotone ph-eye" style={{ fontSize: 16 }} /> View Details</a>
                         </div>
                       </>)}
@@ -199,7 +198,7 @@ export function HistorySummary() {
                     <td className="num">{c.expenditure.toFixed(2)}</td>
                     <td className="tabnum">{c.startTime}</td>
                     <td className="tabnum">{c.endTime}</td>
-                    <td><button className="btn btn-secondary btn-sm" onClick={() => setToast(`Report for "${c.name}" will be available in the Reports Section.`)}><i className="ph-duotone ph-file-text" style={{ fontSize: 14 }} /> Generate Full Report</button></td>
+                    <td><button className="btn btn-secondary btn-sm" onClick={() => setToast(`Summary report for "${c.name}" will be available in the Reports Section.`)}><i className="ph-duotone ph-file-text" style={{ fontSize: 14 }} /> Summary Report</button></td>
                   </tr>
                 ))}
             </tbody>
