@@ -7,10 +7,18 @@ import { StatusPill, EmptyRow, Toast } from "@/components/ui";
 // Shared live/prompt summary: stat chips + filterable table.
 // `kind` selects the seed subset; `showPrompt` adds the Prompt ID column + date filters.
 export function CampaignSummary({ kind, showPrompt }: { kind: "live" | "prompt"; showPrompt?: boolean }) {
-  const base = campaigns.filter((c) => c.kind === kind);
   const [status, setStatus] = useState<"all" | CampaignStatus>("all");
   const [username, setUsername] = useState("all");
   const [selected, setSelected] = useState<Set<number>>(new Set());
+  // ponytail: seed campaigns aren't in the store — pause/resume/stop overrides are session-local
+  const [override, setOverride] = useState<Record<number, CampaignStatus>>({});
+  const [toast, setToast] = useState<string | null>(null);
+  const base = campaigns.filter((c) => c.kind === kind).map((c) => ({ ...c, status: override[c.id] ?? c.status }));
+
+  const setCampaignStatus = (c: Campaign, s: CampaignStatus) => {
+    setOverride((o) => ({ ...o, [c.id]: s }));
+    setToast(`"${c.name}" ${s === "paused" ? "paused" : s === "running" ? "resumed" : "stopped"}.`);
+  };
 
   const rows = useMemo(
     () => base.filter((c) => (status === "all" || c.status === status) && (username === "all" || c.userName === username)),
@@ -100,13 +108,27 @@ export function CampaignSummary({ kind, showPrompt }: { kind: "live" | "prompt";
                     <td className="num">{c.retryCount}</td>
                     <td className="num">{c.variableCount}</td>
                     <td className="text-muted">{c.pauseTime}</td>
-                    <td><a href={`/campaigns/${c.id}`} className="btn btn-ghost">View</a></td>
+                    <td>
+                      <div style={{ display: "flex", alignItems: "center", gap: 2 }}>
+                        {c.status === "running" && (
+                          <button className="btn btn-icon" title="Pause" aria-label={`Pause ${c.name}`} onClick={() => setCampaignStatus(c, "paused")} style={{ width: 30, height: 30, color: "var(--color-neutral-600)" }}><i className="ph-duotone ph-pause-circle" style={{ fontSize: 18 }} /></button>
+                        )}
+                        {c.status === "paused" && (
+                          <button className="btn btn-icon" title="Resume" aria-label={`Resume ${c.name}`} onClick={() => setCampaignStatus(c, "running")} style={{ width: 30, height: 30, color: "#067a47" }}><i className="ph-duotone ph-play-circle" style={{ fontSize: 18 }} /></button>
+                        )}
+                        {(c.status === "running" || c.status === "paused" || c.status === "scheduled") && (
+                          <button className="btn btn-icon" title="Stop" aria-label={`Stop ${c.name}`} onClick={() => setCampaignStatus(c, "complete")} style={{ width: 30, height: 30, color: "var(--color-danger)" }}><i className="ph-duotone ph-stop-circle" style={{ fontSize: 18 }} /></button>
+                        )}
+                        <a href={`/campaigns/${c.id}`} className="btn btn-ghost" style={{ padding: "4px 8px" }}>View</a>
+                      </div>
+                    </td>
                   </tr>
                 ))}
             </tbody>
           </table>
         </div>
       </div>
+      <Toast message={toast} onDone={() => setToast(null)} />
     </>
   );
 }
