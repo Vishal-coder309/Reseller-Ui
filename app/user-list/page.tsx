@@ -6,20 +6,17 @@ import { useStore } from "@/lib/store";
 import { User, CLI_POOL, effectiveStatus } from "@/lib/mock-data";
 import { PageHead, UserStatusPill, Modal, Popover, ListCell, EmptyRow, Toast } from "@/components/ui";
 
-type ActionKind = "add" | "remove" | "addTts" | "removeTts" | "reset" | "assignVoice" | "assignTts";
+type ActionKind = "add" | "remove" | "reset" | "assignVoice";
 const ACTION_TITLES: Record<ActionKind, string> = {
   add: "Add Recharge",
   remove: "Remove Recharge",
-  addTts: "Add TTS Recharge",
-  removeTts: "Remove TTS Recharge",
   reset: "Reset Password",
   assignVoice: "Assign Voice Plan",
-  assignTts: "Assign TTS Plan",
 };
 
 export default function UserList() {
   const store = useStore();
-  const { users, voicePlans, ttsPlans } = store;
+  const { users, voicePlans } = store;
   const [pageSize, setPageSize] = useState(25);
   const [query, setQuery] = useState("");
   const [search, setSearch] = useState("");
@@ -30,7 +27,6 @@ export default function UserList() {
   const [toast, setToast] = useState<string | null>(null);
 
   const planName = (id: number) => voicePlans.find((p) => p.id === id)?.name ?? "—";
-  const ttsPlanName = (id: number) => ttsPlans.find((p) => p.id === id)?.name ?? "—";
 
   const filtered = useMemo(() => {
     const q = search.trim().toLowerCase();
@@ -70,11 +66,11 @@ export default function UserList() {
           <table className="table">
             <thead><tr>
               <th>User Id</th><th>Username</th><th>Location</th><th>Group</th><th>Module</th><th>Account Type</th>
-              <th>Company</th><th>Type</th><th className="num">Voice ₹</th><th>Voice Plan</th><th className="num">TTS ₹</th><th>TTS Plan</th>
+              <th>Company</th><th>Type</th><th className="num">Voice ₹</th><th>Voice Plan</th>
               <th>CLIs</th><th>Parent</th><th>Expiry</th><th>Created</th><th>Status</th><th>Switch</th><th>Action</th><th>CLI</th>
             </tr></thead>
             <tbody>
-              {filtered.length === 0 ? <EmptyRow colSpan={20} icon="ph-users-three" message="No users match your search." /> :
+              {filtered.length === 0 ? <EmptyRow colSpan={18} icon="ph-users-three" message="No users match your search." /> :
                 filtered.map((u) => (
                   <tr key={u.id}>
                     <td className="tabnum">{u.id}</td>
@@ -87,8 +83,6 @@ export default function UserList() {
                     <td><span className={`tag ${u.type === "reseller" ? "tag-accent" : ""}`} style={u.type !== "reseller" ? { background: "var(--color-neutral-200)", color: "var(--color-neutral-800)" } : undefined}>{u.type}</span></td>
                     <td className="num" style={{ fontWeight: 600 }}>{u.voiceBalance.toLocaleString("en-IN")}</td>
                     <td className="text-muted">{planName(u.voicePlanId)}</td>
-                    <td className="num" style={{ fontWeight: 600 }}>{u.ttsBalance.toLocaleString("en-IN")}</td>
-                    <td className="text-muted">{ttsPlanName(u.ttsPlanId)}</td>
                     <td><ListCell label="Allocated CLIs" values={u.clis} empty="None" /></td>
                     <td className="text-muted">{u.parent}</td>
                     <td className="tabnum">{u.expiry}</td>
@@ -107,12 +101,9 @@ export default function UserList() {
                         <Popover onClose={() => setMenuFor(null)} align="right">
                           <Link href={`/update-user/${u.id}`} className="menu-item"><i className="ph-duotone ph-pencil-simple" /> Edit User</Link>
                           <button className="menu-item" onClick={() => { setOpenAction({ user: u, kind: "assignVoice" }); setMenuFor(null); }}><i className="ph-duotone ph-phone-call" /> Assign Voice Plan</button>
-                          <button className="menu-item" onClick={() => { setOpenAction({ user: u, kind: "assignTts" }); setMenuFor(null); }}><i className="ph-duotone ph-chat-text" /> Assign TTS Plan</button>
                           <div style={{ height: 1, background: "var(--color-divider)", margin: "4px 0" }} />
                           <button className="menu-item" onClick={() => { setOpenAction({ user: u, kind: "add" }); setMenuFor(null); }}><i className="ph-duotone ph-plus-circle" /> Add Recharge</button>
                           <button className="menu-item" onClick={() => { setOpenAction({ user: u, kind: "remove" }); setMenuFor(null); }}><i className="ph-duotone ph-minus-circle" /> Remove Recharge</button>
-                          <button className="menu-item" onClick={() => { setOpenAction({ user: u, kind: "addTts" }); setMenuFor(null); }}><i className="ph-duotone ph-chat-text" /> Add TTS Recharge</button>
-                          <button className="menu-item" onClick={() => { setOpenAction({ user: u, kind: "removeTts" }); setMenuFor(null); }}><i className="ph-duotone ph-chat-text-slash" /> Remove TTS Recharge</button>
                           <div style={{ height: 1, background: "var(--color-divider)", margin: "4px 0" }} />
                           <button className="menu-item" onClick={() => { setOpenAction({ user: u, kind: "reset" }); setMenuFor(null); }}><i className="ph-duotone ph-key" /> Reset Password</button>
                         </Popover>
@@ -128,17 +119,16 @@ export default function UserList() {
         </div>
       </div>
 
-      {openAction && (openAction.kind === "assignVoice" || openAction.kind === "assignTts") && (
+      {openAction && openAction.kind === "assignVoice" && (
         <AssignPlanModal
           user={openAction.user}
-          kind={openAction.kind}
           store={store}
           onClose={() => setOpenAction(null)}
           onDone={(msg) => { setToast(msg); setOpenAction(null); }}
         />
       )}
 
-      {openAction && openAction.kind !== "assignVoice" && openAction.kind !== "assignTts" && (
+      {openAction && openAction.kind !== "assignVoice" && (
         <RechargeModal
           user={openAction.user}
           kind={openAction.kind}
@@ -176,30 +166,25 @@ export default function UserList() {
   );
 }
 
-function AssignPlanModal({ user, kind, store, onClose, onDone }: {
-  user: User; kind: "assignVoice" | "assignTts"; store: ReturnType<typeof useStore>; onClose: () => void; onDone: (msg: string) => void;
+function AssignPlanModal({ user, store, onClose, onDone }: {
+  user: User; store: ReturnType<typeof useStore>; onClose: () => void; onDone: (msg: string) => void;
 }) {
   const current = store.users.find((u) => u.id === user.id)!;
-  const isVoice = kind === "assignVoice";
-  // Enabled plans, each pre-formatted with its rate details so the union type doesn't matter downstream.
-  const options = isVoice
-    ? store.voicePlans.filter((p) => p.enabled).map((p) => ({ id: p.id, name: p.name, detail: `${p.pulseDuration}s · ${p.pulsePrice}p/pulse` }))
-    : store.ttsPlans.filter((p) => p.enabled).map((p) => ({ id: p.id, name: p.name, detail: `₹${p.perCharacter}/char · ₹${p.perVariable}/var` }));
-  const currentId = isVoice ? current.voicePlanId : current.ttsPlanId;
+  const options = store.voicePlans.filter((p) => p.enabled).map((p) => ({ id: p.id, name: p.name, detail: `${p.pulseDuration}s · ${p.pulsePrice}p/pulse` }));
+  const currentId = current.voicePlanId;
   const currentPlan = options.find((p) => p.id === currentId);
   const [planId, setPlanId] = useState(currentId);
 
   const submit = () => {
     if (planId === currentId) { onClose(); return; }
     const newName = options.find((p) => p.id === planId)?.name ?? "";
-    if (isVoice) store.assignVoicePlan(user.id, planId);
-    else store.assignTtsPlan(user.id, planId);
-    onDone(`${isVoice ? "Voice" : "TTS"} plan for ${user.username} → ${newName}`);
+    store.assignVoicePlan(user.id, planId);
+    onDone(`Voice plan for ${user.username} → ${newName}`);
   };
 
   return (
     <Modal
-      title={`${ACTION_TITLES[kind]} — ${user.username}`}
+      title={`Assign Voice Plan — ${user.username}`}
       onClose={onClose}
       actions={
         <>
@@ -213,7 +198,7 @@ function AssignPlanModal({ user, kind, store, onClose, onDone }: {
         <div style={{ fontSize: 14, fontWeight: 600 }}>{currentPlan ? `${currentPlan.name} · ${currentPlan.detail}` : "—"}</div>
       </div>
       <div className="field">
-        <label>New {isVoice ? "voice" : "TTS"} plan</label>
+        <label>New voice plan</label>
         <select className="input" value={planId} onChange={(e) => setPlanId(Number(e.target.value))}>
           {options.map((p) => <option key={p.id} value={p.id}>{p.name} · {p.detail}</option>)}
         </select>
@@ -231,8 +216,6 @@ function RechargeModal({ user, kind, onClose, onDone, store }: {
   const [pw2, setPw2] = useState("");
   const [error, setError] = useState<string | null>(null);
   const isReset = kind === "reset";
-  const isTts = kind === "addTts" || kind === "removeTts";
-  const unit = isTts ? "Credits" : "Amount (Rs)";
 
   const submit = () => {
     if (isReset) {
@@ -246,11 +229,8 @@ function RechargeModal({ user, kind, onClose, onDone, store }: {
     let err: string | null = null;
     if (kind === "add") err = store.addRecharge(user.id, amt);
     if (kind === "remove") err = store.removeRecharge(user.id, amt);
-    if (kind === "addTts") err = store.addTtsRecharge(user.id, amt);
-    if (kind === "removeTts") err = store.removeTtsRecharge(user.id, amt);
     if (err) { setError(err); return; }
-    const verb = kind.startsWith("add") ? "Added" : "Removed";
-    onDone(`${verb} ${isTts ? amt + " TTS credits" : "₹" + amt} for ${user.username}`);
+    onDone(`${kind === "add" ? "Added" : "Removed"} ₹${amt} for ${user.username}`);
   };
 
   return (
@@ -273,15 +253,11 @@ function RechargeModal({ user, kind, onClose, onDone, store }: {
         </div>
       ) : (
         <div className="field">
-          <label>{unit}</label>
+          <label>Amount (Rs)</label>
           <input className="input" type="number" min={1} autoFocus value={amount} onChange={(e) => { setAmount(e.target.value); setError(null); }} placeholder="0" />
           <div className="help">
-            {kind.startsWith("add") ? "Your" : "User's"} {isTts ? "TTS" : "Voice"} balance available:{" "}
-            <b className="tabnum">
-              {kind.startsWith("add")
-                ? (isTts ? store.ttsBalance : store.voiceBalance)
-                : (isTts ? user.ttsBalance : user.voiceBalance)}
-            </b>
+            {kind === "add" ? "Your" : "User's"} Voice balance available:{" "}
+            <b className="tabnum">{kind === "add" ? store.voiceBalance : user.voiceBalance}</b>
           </div>
         </div>
       )}

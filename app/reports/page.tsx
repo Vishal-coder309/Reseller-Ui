@@ -34,7 +34,7 @@ export default function Reports() {
   );
 }
 
-const isCredit = (a: LedgerAction) => a === "addition" || a === "tts_addition";
+const isCredit = (a: LedgerAction) => a === "addition";
 
 function CreditsHistory() {
   const { ledger } = useStore();
@@ -64,10 +64,10 @@ function CreditsHistory() {
           <table className="table">
             <thead><tr>
               <th>Credit History Id</th><th>User Id</th><th>From User</th><th>To User</th><th>Action On</th>
-              <th className="num">Amount</th><th>Campaign</th><th>Action</th><th className="num">TTS Credits</th><th>Date</th>
+              <th className="num">Amount</th><th>Campaign</th><th>Action</th><th>Date</th>
             </tr></thead>
             <tbody>
-              {rows.length === 0 ? <EmptyRow colSpan={10} icon="ph-clock-counter-clockwise" message="No credit movements in this range." /> :
+              {rows.length === 0 ? <EmptyRow colSpan={9} icon="ph-clock-counter-clockwise" message="No credit movements in this range." /> :
                 rows.map((l) => (
                   <tr key={l.id}>
                     <td className="tabnum">{l.id}</td>
@@ -78,7 +78,6 @@ function CreditsHistory() {
                     <td className={`num ${isCredit(l.action) ? "amount-pos" : "amount-neg"}`}>{isCredit(l.action) ? "+" : "−"}₹{l.amount}</td>
                     <td className="text-muted">{l.campaign}</td>
                     <td><span className="tag tag-accent" style={{ fontFamily: "ui-monospace,monospace" }}>{l.action}</span></td>
-                    <td className="num">{l.ttsCredits || "—"}</td>
                     <td className="tabnum">{l.date}</td>
                   </tr>
                 ))}
@@ -176,7 +175,7 @@ function ActivityLogs() {
       .filter((l) => l.fromUser === RESELLER.username || l.toUser === RESELLER.username)
       .map((l) => ({
         id: 100000 + l.id,
-        action: l.action === "tts_addition" ? "ADD_TTS_RECHARGE" : l.fromUser === RESELLER.username ? "ADD_RECHARGE" : "REMOVE_RECHARGE",
+        action: l.fromUser === RESELLER.username ? "ADD_RECHARGE" : "REMOVE_RECHARGE",
         username: RESELLER.username, userId: 999, ip: "103.21.44.10", date: l.date,
       }));
     return [...fromLedger, ...seedActivity].sort((a, b) => (a.date < b.date ? 1 : -1));

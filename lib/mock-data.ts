@@ -252,7 +252,7 @@ export const campaigns: Campaign[] = [
 export const ledger: LedgerEntry[] = [
   { id: 7001, userId: 5001, fromUser: "DEMO_OPERATOR", toUser: "acme_calls", actionOn: "acme_calls", amount: 500, campaign: "-", action: "addition", ttsCredits: 0, date: "2026-07-30 10:12" },
   { id: 7002, userId: 5001, fromUser: "acme_calls", toUser: "-", actionOn: "Diwali Push 01", amount: 160, campaign: "Diwali Push 01", action: "campaign_deduction", ttsCredits: 0, date: "2026-08-03 09:52" },
-  { id: 7003, userId: 5002, fromUser: "DEMO_OPERATOR", toUser: "civic_poll", actionOn: "civic_poll", amount: 100, campaign: "-", action: "tts_addition", ttsCredits: 100, date: "2026-07-29 14:03" },
+  { id: 7003, userId: 5002, fromUser: "DEMO_OPERATOR", toUser: "civic_poll", actionOn: "civic_poll", amount: 100, campaign: "-", action: "addition", ttsCredits: 0, date: "2026-07-29 14:03" },
   { id: 7004, userId: 5003, fromUser: "DEMO_OPERATOR", toUser: "loanhub", actionOn: "loanhub", amount: 200, campaign: "-", action: "deduction", ttsCredits: 0, date: "2026-07-28 09:00" },
   { id: 7005, userId: 5005, fromUser: "DEMO_OPERATOR", toUser: "healthline", actionOn: "healthline", amount: 300, campaign: "-", action: "addition", ttsCredits: 0, date: "2026-07-27 16:40" },
   { id: 7006, userId: 5003, fromUser: "loanhub", toUser: "-", actionOn: "Repayment Alert", amount: 92, campaign: "Repayment Alert", action: "campaign_deduction", ttsCredits: 0, date: "2026-07-25 15:44" },

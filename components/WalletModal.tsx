@@ -19,26 +19,24 @@ function downloadCsv(filename: string, rows: (string | number)[][]) {
 // Credits received from the superadmin — the store ledger only records user-facing moves.
 const SUPERADMIN_TOPUPS = [
   { date: "2026-08-01 11:20", service: "Voice", product: RESELLER.planName, amt: 2000, reason: "Top-up from SUPERADMIN" },
-  { date: "2026-07-24 10:05", service: "TTS", product: "TTS Credits", amt: 1000, reason: "Top-up from SUPERADMIN" },
 ];
 
 // Ledger entries seen from the reseller's wallet: recharges to users are debits,
 // removals are credits back. Users' own campaign spend never touches this wallet.
 function ledgerRow(e: LedgerEntry) {
   if (e.action === "campaign_deduction") return null;
-  const tts = e.action === "tts_addition" || e.ttsCredits > 0;
   const out = e.action !== "deduction";
   return {
     date: e.date,
-    service: tts ? "TTS" : "Voice",
-    product: tts ? "TTS Credits" : RESELLER.planName,
+    service: "Voice",
+    product: RESELLER.planName,
     amt: out ? -e.amount : e.amount,
     reason: out ? `Recharge to ${e.actionOn}` : `Credit back from ${e.actionOn}`,
   };
 }
 
 export default function WalletModal({ onClose }: { onClose: () => void }) {
-  const { voiceBalance, ttsBalance, ledger, voicePlans, ttsPlans } = useStore();
+  const { voiceBalance, ledger, voicePlans } = useStore();
   const [productOpen, setProductOpen] = useState(false);
   const [range, setRange] = useState<{ start: number | null; end: number | null }>({ start: null, end: null });
 
@@ -63,7 +61,6 @@ export default function WalletModal({ onClose }: { onClose: () => void }) {
 
   const summary = [
     { service: "Voice", product: RESELLER.planName, credit: fmt(voiceBalance), type: "Debit" },
-    { service: "TTS", product: "TTS Credits", credit: fmt(ttsBalance), type: "Debit" },
   ];
   const history = [...ledger.map(ledgerRow).filter((r) => r !== null), ...SUPERADMIN_TOPUPS]
     .sort((a, b) => b.date.localeCompare(a.date));
@@ -94,7 +91,7 @@ export default function WalletModal({ onClose }: { onClose: () => void }) {
               <div style={{ display: "grid", gridTemplateColumns: "1fr", gap: 16, marginTop: 18 }}>
                 <div style={{ background: "var(--color-bg)", border: "1px solid var(--color-divider)", borderRadius: "var(--radius-md)", padding: "14px 16px" }}>
                   <div style={{ fontSize: 12, color: "var(--color-neutral-600)" }}>Total Balance</div>
-                  <div className="tabnum" style={{ fontFamily: "var(--font-heading)", fontWeight: 700, fontSize: 28, marginTop: 5 }}>{fmt(voiceBalance + ttsBalance)}</div>
+                  <div className="tabnum" style={{ fontFamily: "var(--font-heading)", fontWeight: 700, fontSize: 28, marginTop: 5 }}>{fmt(voiceBalance)}</div>
                   <div style={{ fontSize: 11.5, color: "var(--color-neutral-500)", marginTop: 6 }}>Used in last 30 days {"·"} {used30}</div>
                 </div>
               </div>
@@ -181,12 +178,6 @@ export default function WalletModal({ onClose }: { onClose: () => void }) {
                       <td className="text-muted">{p.name}</td>
                       <td className="text-muted">{p.pulseDuration} sec</td>
                       <td className="num">{p.pulsePrice} p / pulse</td>
-                    </tr>))}
-                    {ttsPlans.map((p) => (<tr key={"t" + p.id}>
-                      <td style={{ fontWeight: 600, fontFamily: "var(--font-heading)" }}>TTS</td>
-                      <td className="text-muted">{p.name}</td>
-                      <td className="text-muted">per character</td>
-                      <td className="num">{p.perCharacter} p + {p.perVariable} p / var</td>
                     </tr>))}
                   </tbody></table>
                 </div>

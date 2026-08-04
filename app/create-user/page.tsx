@@ -17,7 +17,6 @@ export default function CreateUser() {
     username: "", password: "", confirm: "", name: "", email: "", mobile: "",
     company: "", address: "", pincode: "", customerType: "user" as "reseller" | "user",
     voicePlanId: store.voicePlans.find((p) => p.enabled)?.id ?? 0,
-    ttsPlanId: store.ttsPlans.find((p) => p.enabled)?.id ?? 0,
     userId: "", expiry: "", planType: "Prepaid" as "Prepaid" | "Postpaid",
     accountType: "Promotional",
   });
@@ -38,7 +37,6 @@ export default function CreateUser() {
     store.createUser({
       username: f.username, name: f.name, email: f.email, mobile: f.mobile, company: f.company,
       address: f.address, pincode: f.pincode, type: f.customerType, voicePlanId: Number(f.voicePlanId),
-      ttsPlanId: Number(f.ttsPlanId),
       id: f.userId ? Number(f.userId) : undefined, expiry: f.expiry || undefined, planType: f.planType,
       accountType: f.accountType, module: modules.map((m) => m.module),
     });
@@ -72,11 +70,6 @@ export default function CreateUser() {
           <div className="field"><label>Voice Plan</label>
             <select className="input" value={f.voicePlanId} onChange={(e) => set("voicePlanId", Number(e.target.value))}>
               {store.voicePlans.filter((p) => p.enabled).map((p) => <option key={p.id} value={p.id}>{p.name} · {p.pulseDuration}s · {p.pulsePrice}p</option>)}
-            </select>
-          </div>
-          <div className="field"><label>TTS Plan</label>
-            <select className="input" value={f.ttsPlanId} onChange={(e) => set("ttsPlanId", Number(e.target.value))}>
-              {store.ttsPlans.filter((p) => p.enabled).map((p) => <option key={p.id} value={p.id}>{p.name} · ₹{p.perCharacter}/char · ₹{p.perVariable}/var</option>)}
             </select>
           </div>
           <div className="field"><label>User-Id</label><input className="input" type="number" value={f.userId} onChange={(e) => set("userId", e.target.value)} placeholder="auto" /></div>

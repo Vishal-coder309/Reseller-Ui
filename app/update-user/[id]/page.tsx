@@ -17,7 +17,6 @@ export default function UpdateUser({ params }: { params: Promise<{ id: string }>
     name: user?.name ?? "", email: user?.email ?? "", mobile: user?.mobile ?? "",
     address: user?.address ?? "", pincode: user?.pincode ?? "", company: user?.company ?? "",
     voicePlanId: user?.voicePlanId ?? store.voicePlans[0]?.id ?? 0,
-    ttsPlanId: user?.ttsPlanId ?? store.ttsPlans[0]?.id ?? 0,
     accountType: user?.accountType ?? "Promotional", expiry: user?.expiry ?? "",
     planType: user?.planType ?? "Prepaid",
   }));
@@ -32,7 +31,7 @@ export default function UpdateUser({ params }: { params: Promise<{ id: string }>
   const submit = () => {
     store.updateUser(user.id, {
       name: f.name, email: f.email, mobile: f.mobile, address: f.address, pincode: f.pincode,
-      company: f.company, voicePlanId: Number(f.voicePlanId), ttsPlanId: Number(f.ttsPlanId),
+      company: f.company, voicePlanId: Number(f.voicePlanId),
       accountType: f.accountType, expiry: f.expiry, planType: f.planType as "Prepaid" | "Postpaid", module: modules,
     });
     setToast(`User ${user.username} updated`);
@@ -55,11 +54,6 @@ export default function UpdateUser({ params }: { params: Promise<{ id: string }>
           <div className="field"><label>Voice Plan</label>
             <select className="input" value={f.voicePlanId} onChange={(e) => set("voicePlanId", Number(e.target.value))}>
               {store.voicePlans.filter((p) => p.enabled || p.id === user.voicePlanId).map((p) => <option key={p.id} value={p.id}>{p.name} · {p.pulseDuration}s · {p.pulsePrice}p{p.enabled ? "" : " (disabled)"}</option>)}
-            </select>
-          </div>
-          <div className="field"><label>TTS Plan</label>
-            <select className="input" value={f.ttsPlanId} onChange={(e) => set("ttsPlanId", Number(e.target.value))}>
-              {store.ttsPlans.filter((p) => p.enabled || p.id === user.ttsPlanId).map((p) => <option key={p.id} value={p.id}>{p.name} · ₹{p.perCharacter}/char{p.enabled ? "" : " (disabled)"}</option>)}
             </select>
           </div>
           <div className="field"><label>User Type</label><input className="input" value={user.type} disabled /></div>

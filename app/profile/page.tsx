@@ -10,7 +10,7 @@ const valueBox: React.CSSProperties = { ...lockedBox, color: "var(--color-text)"
 const label: React.CSSProperties = { fontSize: 12, color: "var(--color-neutral-600)", marginBottom: 6 };
 
 export default function Profile() {
-  const { voiceBalance, ttsBalance } = useStore();
+  const { voiceBalance } = useStore();
   // ponytail: profile edits are session-local — the mock store has no reseller mutation
   const [profile, setProfile] = useState({ name: RESELLER.name, email: RESELLER.email, mobile: RESELLER.mobile, company: RESELLER.company });
   const [draft, setDraft] = useState(profile);
@@ -75,7 +75,7 @@ export default function Profile() {
             ))}
             <div><div style={label}>User type</div><div style={lockedBox}>{RESELLER.type}</div></div>
             <div><div style={label}>Plan name</div><div style={lockedBox}>{RESELLER.planName}</div></div>
-            <div><div style={label}>Balance</div><div className="tabnum" style={lockedBox}>₹{voiceBalance} voice · ₹{ttsBalance} TTS</div></div>
+            <div><div style={label}>Balance</div><div className="tabnum" style={lockedBox}>₹{voiceBalance}</div></div>
           </div>
           <div className="banner" style={{ marginTop: 18, marginBottom: 0 }}>
             <i className="ph-duotone ph-info" style={{ fontSize: 16, color: "var(--color-accent-700)", flex: "none", marginTop: 1 }} />
