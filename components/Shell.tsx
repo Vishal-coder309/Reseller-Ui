@@ -32,7 +32,7 @@ function isActive(pathname: string, href: string) {
 
 export default function Shell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
-  const { voiceBalance, ttsBalance, viewingAs, setViewingAs } = useStore();
+  const { viewingAs, setViewingAs } = useStore();
   const [menuOpen, setMenuOpen] = useState(false);
   const [walletOpen, setWalletOpen] = useState(false);
   const [notifOpen, setNotifOpen] = useState(false);
@@ -115,12 +115,6 @@ export default function Shell({ children }: { children: React.ReactNode }) {
             <input className="input" style={{ paddingLeft: 36, height: 38, borderRadius: 999 }} placeholder="Search users, campaigns…" aria-label="Search" />
           </div>
           <div style={{ marginLeft: "auto", display: "flex", alignItems: "center", gap: 10 }}>
-            <div style={{ display: "flex", alignItems: "center", gap: 7, height: 34, padding: "0 13px", borderRadius: 999, background: "var(--color-accent-100)", color: "var(--color-accent-800)", fontSize: 13 }}>
-              <i className="ph-duotone ph-phone-call" style={{ fontSize: 15 }} /> Voice <b className="tabnum">₹{voiceBalance}</b>
-            </div>
-            <div style={{ display: "flex", alignItems: "center", gap: 7, height: 34, padding: "0 13px", borderRadius: 999, background: "var(--color-accent-2-100)", color: "var(--color-accent-2-800)", fontSize: 13 }}>
-              <i className="ph-duotone ph-chat-text" style={{ fontSize: 15 }} /> TTS <b className="tabnum">₹{ttsBalance}</b>
-            </div>
             <button className="btn btn-primary" onClick={() => setWalletOpen(true)}><i className="ph-duotone ph-wallet" style={{ fontSize: 16 }} /> Wallet</button>
             <div style={{ position: "relative" }}>
               <button className="btn btn-icon" aria-label="Notifications" aria-expanded={notifOpen} onClick={() => setNotifOpen((o) => !o)} style={{ color: "var(--color-neutral-600)", position: "relative" }}>
