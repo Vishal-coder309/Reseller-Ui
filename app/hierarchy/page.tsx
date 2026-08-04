@@ -64,8 +64,9 @@ export default function Hierarchy() {
   return (
     <>
       <PageHead kicker="Users" title="Account Hierarchy" />
-      <div className="card" style={{ overflowX: "auto" }}>
-        <div style={{ display: "flex", gap: 16, alignItems: "center", padding: "14px 18px 0", flexWrap: "wrap" }}>
+      <div className="card">
+        {/* toolbar */}
+        <div style={{ display: "flex", gap: 16, alignItems: "center", padding: "13px 18px", flexWrap: "wrap", borderBottom: "1px solid var(--color-divider)" }}>
           <div style={{ position: "relative", width: 280, flex: "none" }}>
             <i className="ph-duotone ph-magnifying-glass" style={{ position: "absolute", left: 11, top: "50%", transform: "translateY(-50%)", color: "var(--color-neutral-500)", fontSize: 16 }} />
             <input className="input" style={{ paddingLeft: 34, borderRadius: 999 }} placeholder="Find a user or reseller…" aria-label="Search hierarchy" value={query} onChange={(e) => setQuery(e.target.value)} />
@@ -77,10 +78,11 @@ export default function Hierarchy() {
             <span className="text-muted">Lines show who manages whom</span>
           </div>
         </div>
+        <div className="org-canvas">
         <ul className="org">
           <li>
             {/* root: you */}
-            <div className="org-node" style={{ background: "#091f44", border: "none", width: 172, padding: "14px 12px 12px", ...(q ? { opacity: 0.55 } : undefined) }}>
+            <div className="org-node" style={{ background: "#091f44", border: "none", width: 172, padding: "14px 12px 12px", boxShadow: "0 12px 28px rgba(9,31,68,0.32)", ...(q ? { opacity: 0.55 } : undefined) }}>
               <span style={{ width: 44, height: 44, borderRadius: "50%", background: "linear-gradient(135deg,#00b8ff,#4fd0ff)", color: "#00344b", display: "grid", placeItems: "center", fontFamily: "var(--font-heading)", fontWeight: 700, fontSize: 14 }}>
                 {RESELLER.name.split(" ").map((w) => w[0]).join("").slice(0, 2).toUpperCase()}
               </span>
@@ -91,6 +93,7 @@ export default function Hierarchy() {
             {renderChildren(RESELLER.username)}
           </li>
         </ul>
+        </div>
       </div>
     </>
   );
