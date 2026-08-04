@@ -1,0 +1,81 @@
+- generic [ref=f20e3]:
+  - banner [ref=f20e4]:
+    - list [ref=f20e5]:
+      - listitem [ref=f20e6]:
+        - 'button "TTS Balance(Rs) : 130" [ref=f20e7] [cursor=pointer]'
+      - listitem [ref=f20e8]:
+        - 'button "Voice Balance(Rs) : 95" [ref=f20e9] [cursor=pointer]'
+      - listitem [ref=f20e10]:
+        - link "Activity Logs" [ref=f20e11] [cursor=pointer]:
+          - /url: /activity-logs
+      - button "Welcome DEMO_OPERATOR" [ref=f20e13] [cursor=pointer]
+  - generic [ref=f20e14]:
+    - generic [ref=f20e17]:
+      - link:
+        - /url: https://obd3.expressivr.com
+      - list [ref=f20e18]:
+        - listitem [ref=f20e19]:
+          - link " Dashboard" [ref=f20e20] [cursor=pointer]:
+            - /url: /
+            - generic [ref=f20e21]: 
+            - text: Dashboard
+        - listitem [ref=f20e22]:
+          - generic [ref=f20e23]:
+            - generic [ref=f20e24]:
+              - heading " Manage Users" [level=2] [ref=f20e25]:
+                - button " Manage Users" [expanded] [ref=f20e26] [cursor=pointer]
+              - list [ref=f20e30]:
+                - listitem [ref=f20e31]
+                - listitem [ref=f20e34]
+                - listitem [ref=f20e37]
+                - listitem [ref=f20e40]
+                - listitem [ref=f20e43]
+                - listitem [ref=f20e46]
+            - generic [ref=f20e49]:
+              - heading " Manage Campaign" [level=2] [ref=f20e50]:
+                - button " Manage Campaign" [ref=f20e51] [cursor=pointer]
+              - text:   
+            - generic [ref=f20e53]:
+              - heading " Voice Plans" [level=2] [ref=f20e54]:
+                - button " Voice Plans" [ref=f20e55] [cursor=pointer]
+              - text:  
+            - generic [ref=f20e57]:
+              - heading " TTS Plans" [level=2] [ref=f20e58]:
+                - button " TTS Plans" [ref=f20e59] [cursor=pointer]
+              - text:  
+            - generic [ref=f20e61]:
+              - heading " Voice Library" [level=2] [ref=f20e62]:
+                - button " Voice Library" [ref=f20e63] [cursor=pointer]
+              - text: 
+    - main [ref=f20e65]:
+      - generic [ref=f20e68]:
+        - generic [ref=f20e69]: Historical Voice Campaign Summary Admin
+        - generic [ref=f20e71]:
+          - generic [ref=f20e73]:
+            - textbox "Start Date" [ref=f20e78]: 2026-08-02
+            - textbox "End Date" [ref=f20e83]: 2026-08-02
+            - combobox [ref=f20e86]:
+              - option "Select Filter" [selected]
+              - option "User Id"
+              - option "Campaign Id"
+              - option "Campaign Name"
+            - button "Search" [ref=f20e88] [cursor=pointer]
+          - generic [ref=f20e93]:
+            - text: Show
+            - button "10" [ref=f20e95] [cursor=pointer]
+            - text: items
+            - generic [ref=f20e97]:
+              - generic [ref=f20e98]: Search this table
+              - textbox "Search this table" [ref=f20e99]:
+                - /placeholder: Search
+            - button "Clear" [ref=f20e100] [cursor=pointer]
+            - button "Export All Data" [ref=f20e101] [cursor=pointer]
+            - button "Refresh" [ref=f20e102] [cursor=pointer]
+            - separator [ref=f20e103]
+            - table [ref=f20e105]:
+              - rowgroup [ref=f20e106]:
+                - row "Select Campaign ID Campaign Name sortable User Name sortable Campaign Status sortable Campaign Type sortable Start Time sort desc End Time sortable Pause Time sortable Total Numbers TCD Calls Dialed Pending Calls Connected Calls Total Pulses sortable DnD Count sortable Dtmf Count sortable Dtmf1 Count sortable Dtmf2 Count sortable SMS Count sortable Total Variable Count Action" [ref=f20e107]
+              - rowgroup [ref=f20e143]:
+                - row "No data available" [ref=f20e144]
+            - list
+  - contentinfo [ref=f20e92]

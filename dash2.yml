@@ -1,0 +1,279 @@
+- generic [ref=f18e3]:
+  - banner [ref=f18e4]:
+    - list [ref=f18e5]:
+      - listitem [ref=f18e6]:
+        - 'button "TTS Balance(Rs) : 130" [ref=f18e7] [cursor=pointer]'
+      - listitem [ref=f18e8]:
+        - 'button "Voice Balance(Rs) : 95" [ref=f18e9] [cursor=pointer]'
+      - listitem [ref=f18e10]:
+        - link "Activity Logs" [ref=f18e11] [cursor=pointer]:
+          - /url: /activity-logs
+      - button "Welcome DEMO_OPERATOR" [ref=f18e13] [cursor=pointer]
+  - generic [ref=f18e14]:
+    - generic [ref=f18e17]:
+      - link:
+        - /url: https://obd3.expressivr.com
+      - list [ref=f18e18]:
+        - listitem [ref=f18e19]:
+          - link " Dashboard" [ref=f18e20] [cursor=pointer]:
+            - /url: /
+            - generic [ref=f18e21]: 
+            - text: Dashboard
+        - listitem [ref=f18e22]:
+          - generic [ref=f18e23]:
+            - generic [ref=f18e24]:
+              - heading [level=2] [ref=f18e25]:
+                - button " Manage Users" [expanded] [ref=f18e26] [cursor=pointer]:
+                  - generic [ref=f18e27]: 
+                  - text: Manage Users
+              - list [ref=f18e30]:
+                - listitem [ref=f18e31]:
+                  - link " Create User" [ref=f18e32] [cursor=pointer]:
+                    - /url: /create-user
+                    - generic [ref=f18e33]: 
+                    - text: Create User
+                - listitem [ref=f18e34]:
+                  - link " User List" [ref=f18e35] [cursor=pointer]:
+                    - /url: /user-list
+                    - generic [ref=f18e36]: 
+                    - text: User List
+                - listitem [ref=f18e37]:
+                  - link " Credits History" [ref=f18e38] [cursor=pointer]:
+                    - /url: /credits-history
+                    - generic [ref=f18e39]: 
+                    - text: Credits History
+                - listitem [ref=f18e40]:
+                  - link " Reseller Summary" [ref=f18e41] [cursor=pointer]:
+                    - /url: /reseller-summary
+                    - generic [ref=f18e42]: 
+                    - text: Reseller Summary
+                - listitem [ref=f18e43]:
+                  - link " Activity Logs" [ref=f18e44] [cursor=pointer]:
+                    - /url: /activity-logs
+                    - generic [ref=f18e45]: 
+                    - text: Activity Logs
+                - listitem [ref=f18e46]:
+                  - link " Voice Plan Logs" [ref=f18e47] [cursor=pointer]:
+                    - /url: /voice-plan-logs
+                    - generic [ref=f18e48]: 
+                    - text: Voice Plan Logs
+            - generic [ref=f18e49]:
+              - heading [level=2] [ref=f18e50]:
+                - button " Manage Campaign" [ref=f18e51] [cursor=pointer]:
+                  - generic [ref=f18e52]: 
+                  - text: Manage Campaign
+              - text:   
+            - generic [ref=f18e53]:
+              - heading [level=2] [ref=f18e54]:
+                - button " Voice Plans" [ref=f18e55] [cursor=pointer]:
+                  - generic [ref=f18e56]: 
+                  - text: Voice Plans
+              - text:  
+            - generic [ref=f18e57]:
+              - heading [level=2] [ref=f18e58]:
+                - button " TTS Plans" [ref=f18e59] [cursor=pointer]:
+                  - generic [ref=f18e60]: 
+                  - text: TTS Plans
+              - text:  
+            - generic [ref=f18e61]:
+              - heading [level=2] [ref=f18e62]:
+                - button " Voice Library" [ref=f18e63] [cursor=pointer]:
+                  - generic [ref=f18e64]: 
+                  - text: Voice Library
+              - text: 
+    - main [ref=f18e65]:
+      - generic [ref=f18e67]:
+        - heading "Dashboard" [level=1] [ref=f18e69]
+        - generic [ref=f18e70]:
+          - generic [ref=f18e73]:
+            - generic [ref=f18e74]: Total Resellers
+            - generic [ref=f18e75]: "0"
+          - generic [ref=f18e81]:
+            - generic [ref=f18e82]: Total End Users
+            - generic [ref=f18e83]: "5"
+        - generic [ref=f18e89]:
+          - generic [ref=f18e90]: User-wise Campaign Summary
+          - generic [ref=f18e91]:
+            - generic [ref=f18e93]:
+              - generic [ref=f18e95]:
+                - generic [ref=f18e96]: Start Date
+                - textbox "Start Date" [ref=f18e99]: 2026-08-03
+              - generic [ref=f18e101]:
+                - generic [ref=f18e102]: End Date
+                - textbox "End Date" [ref=f18e105]: 2026-08-03
+              - generic [ref=f18e107]:
+                - generic [ref=f18e108]: User ID
+                - textbox "Enter User ID" [ref=f18e109]
+              - generic [ref=f18e110]:
+                - button "Search" [ref=f18e111] [cursor=pointer]
+                - button "Clear" [ref=f18e112] [cursor=pointer]
+            - generic [ref=f18e113]:
+              - generic [ref=f18e114]:
+                - generic [ref=f18e115]: Show items
+                - generic [ref=f18e117]:
+                  - generic [ref=f18e118]: Search this table
+                  - textbox "Search this table" [ref=f18e119]:
+                    - /placeholder: Search
+                - button "Clear" [ref=f18e121] [cursor=pointer]
+                - button "Export to CSV" [ref=f18e123] [cursor=pointer]
+              - table [ref=f18e125]:
+                - rowgroup [ref=f18e126]:
+                  - row "User ID sortable Username sortable Total Campaigns sortable Total Numbers sortable Calls Dialed sortable DnD Count sortable Connected Calls sortable Pending Calls Action" [ref=f18e127]:
+                    - columnheader "User ID sortable" [ref=f18e128] [cursor=pointer]:
+                      - text: User ID
+                      - generic [ref=f18e129]: ↑↓
+                    - columnheader "Username sortable" [ref=f18e130] [cursor=pointer]:
+                      - text: Username
+                      - generic [ref=f18e131]: ↑↓
+                    - columnheader "Total Campaigns sortable" [ref=f18e132] [cursor=pointer]:
+                      - text: Total Campaigns
+                      - generic [ref=f18e133]: ↑↓
+                    - columnheader "Total Numbers sortable" [ref=f18e134] [cursor=pointer]:
+                      - text: Total Numbers
+                      - generic [ref=f18e135]: ↑↓
+                    - columnheader "Calls Dialed sortable" [ref=f18e136] [cursor=pointer]:
+                      - text: Calls Dialed
+                      - generic [ref=f18e137]: ↑↓
+                    - columnheader "DnD Count sortable" [ref=f18e138] [cursor=pointer]:
+                      - text: DnD Count
+                      - generic [ref=f18e139]: ↑↓
+                    - columnheader "Connected Calls sortable" [ref=f18e140] [cursor=pointer]:
+                      - text: Connected Calls
+                      - generic [ref=f18e141]: ↑↓
+                    - columnheader "Pending Calls" [ref=f18e142]
+                    - columnheader "Action" [ref=f18e143]
+                - rowgroup [ref=f18e144]:
+                  - row "No data available for the selected date range" [ref=f18e145]:
+                    - cell "No data available for the selected date range" [ref=f18e146]
+              - list
+        - generic [ref=f18e150]:
+          - generic [ref=f18e151]: Today Live Campaigns Summary
+          - generic [ref=f18e154]:
+            - text: Show
+            - button "10" [ref=f18e156] [cursor=pointer]
+            - text: items
+            - generic [ref=f18e158]:
+              - generic [ref=f18e159]: Search this table
+              - textbox "Search this table" [ref=f18e160]:
+                - /placeholder: Search
+            - button "Clear" [ref=f18e161] [cursor=pointer]
+            - separator
+            - table [ref=f18e163]:
+              - rowgroup [ref=f18e164]:
+                - row "Campaign Id Campaign Name sortable User Id User Name sortable Campaign Status sortable Channels sortable Campaign Type sortable Start Time sortable End Time sortable Total Numbers Calls Dialed Pending Calls Connected Calls Total Pulses sortable DnD Count sortable Dtmf Count sortable Dtmf1 Count sortable Dtmf2 Count sortable SMS Count sortable Retry Count sortable No. Of retries sortable" [ref=f18e165]:
+                  - columnheader "Campaign Id" [ref=f18e166]
+                  - columnheader "Campaign Name sortable" [ref=f18e167] [cursor=pointer]:
+                    - text: Campaign Name
+                    - generic [ref=f18e168]: ↑↓
+                  - columnheader "User Id" [ref=f18e169]
+                  - columnheader "User Name sortable" [ref=f18e170] [cursor=pointer]:
+                    - text: User Name
+                    - generic [ref=f18e171]: ↑↓
+                  - columnheader "Campaign Status sortable" [ref=f18e172] [cursor=pointer]:
+                    - text: Campaign Status
+                    - generic [ref=f18e173]: ↑↓
+                  - columnheader "Channels sortable" [ref=f18e174] [cursor=pointer]:
+                    - text: Channels
+                    - generic [ref=f18e175]: ↑↓
+                  - columnheader "Campaign Type sortable" [ref=f18e176] [cursor=pointer]:
+                    - text: Campaign Type
+                    - generic [ref=f18e177]: ↑↓
+                  - columnheader "Start Time sortable" [ref=f18e178] [cursor=pointer]:
+                    - text: Start Time
+                    - generic [ref=f18e179]: ↑↓
+                  - columnheader "End Time sortable" [ref=f18e180] [cursor=pointer]:
+                    - text: End Time
+                    - generic [ref=f18e181]: ↑↓
+                  - columnheader "Total Numbers" [ref=f18e182]
+                  - columnheader "Calls Dialed" [ref=f18e183]
+                  - columnheader "Pending Calls" [ref=f18e184]
+                  - columnheader "Connected Calls" [ref=f18e185]
+                  - columnheader "Total Pulses sortable" [ref=f18e186] [cursor=pointer]:
+                    - text: Total Pulses
+                    - generic [ref=f18e187]: ↑↓
+                  - columnheader "DnD Count sortable" [ref=f18e188] [cursor=pointer]:
+                    - text: DnD Count
+                    - generic [ref=f18e189]: ↑↓
+                  - columnheader "Dtmf Count sortable" [ref=f18e190] [cursor=pointer]:
+                    - text: Dtmf Count
+                    - generic [ref=f18e191]: ↑↓
+                  - columnheader "Dtmf1 Count sortable" [ref=f18e192] [cursor=pointer]:
+                    - text: Dtmf1 Count
+                    - generic [ref=f18e193]: ↑↓
+                  - columnheader "Dtmf2 Count sortable" [ref=f18e194] [cursor=pointer]:
+                    - text: Dtmf2 Count
+                    - generic [ref=f18e195]: ↑↓
+                  - columnheader "SMS Count sortable" [ref=f18e196] [cursor=pointer]:
+                    - text: SMS Count
+                    - generic [ref=f18e197]: ↑↓
+                  - columnheader "Retry Count sortable" [ref=f18e198] [cursor=pointer]:
+                    - text: Retry Count
+                    - generic [ref=f18e199]: ↑↓
+                  - columnheader "No. Of retries sortable" [ref=f18e200] [cursor=pointer]:
+                    - text: No. Of retries
+                    - generic [ref=f18e201]: ↑↓
+              - rowgroup [ref=f18e202]:
+                - row "No data available" [ref=f18e203]:
+                  - cell "No data available" [ref=f18e204]
+            - list
+        - generic [ref=f18e206]:
+          - generic [ref=f18e208]:
+            - generic [ref=f18e209]: Campaign Analysis
+            - generic [ref=f18e211]:
+              - generic [ref=f18e212]:
+                - generic [ref=f18e213]:
+                  - textbox "Start Date" [ref=f18e218]: 2026-08-01
+                  - textbox "End Date" [ref=f18e223]: 2026-08-03
+                  - combobox [ref=f18e226]:
+                    - option "Select User" [selected]
+                    - option "DEMO_OPERATOR"
+                    - option "amit1"
+                    - option "demo_1.1"
+                    - option "mukesh"
+                    - option "orbitel_tuser1"
+                    - option "vishal yadav"
+                - generic [ref=f18e227]:
+                  - combobox [ref=f18e230]:
+                    - option "Select Campaign Type" [selected]
+                    - option "All"
+                    - option "Simple IVR"
+                    - option "DTMF"
+                    - option "Call Patch"
+                    - option "Custom IVR"
+                  - combobox [ref=f18e233]:
+                    - option "Select Campaign Name" [selected]
+                    - option "All"
+                  - button "Search" [ref=f18e235] [cursor=pointer]
+              - generic [ref=f18e236]:
+                - text: Show
+                - button "10" [ref=f18e238] [cursor=pointer]
+                - text: items
+                - generic [ref=f18e240]:
+                  - generic [ref=f18e241]: Search this table
+                  - textbox "Search this table" [ref=f18e242]:
+                    - /placeholder: Search
+                - button "Clear" [ref=f18e243] [cursor=pointer]
+                - separator
+                - table [ref=f18e245]:
+                  - rowgroup [ref=f18e246]:
+                    - row "Campaign Name sortable Campaign Type Answered DTMF Non Answered Expenditure (INR)" [ref=f18e247]:
+                      - columnheader "Campaign Name sortable" [ref=f18e248] [cursor=pointer]:
+                        - text: Campaign Name
+                        - generic [ref=f18e249]: ↑↓
+                      - columnheader "Campaign Type" [ref=f18e250]
+                      - columnheader "Answered" [ref=f18e251]
+                      - columnheader "DTMF" [ref=f18e252]
+                      - columnheader "Non Answered" [ref=f18e253]
+                      - columnheader "Expenditure (INR)" [ref=f18e254]
+                  - rowgroup [ref=f18e255]:
+                    - row "No data available" [ref=f18e256]:
+                      - cell "No data available" [ref=f18e257]
+                - list
+          - generic [ref=f18e260]:
+            - generic [ref=f18e261]: Campaign Analysis
+            - list [ref=f18e267]:
+              - listitem [ref=f18e268]: Answered
+              - listitem [ref=f18e271]: DTMF
+              - listitem [ref=f18e274]: Non Answered
+              - listitem [ref=f18e277]: Expenditure
+  - contentinfo [ref=f18e280]
