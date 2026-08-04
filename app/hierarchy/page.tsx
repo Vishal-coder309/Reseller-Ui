@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import Link from "next/link";
 import { useStore } from "@/lib/store";
 import { RESELLER, User } from "@/lib/mock-data";
@@ -13,67 +12,65 @@ const AVATARS = [
 ];
 const fmt = (n: number) => n.toLocaleString("en-IN");
 
+function NodeCard({ u }: { u: User }) {
+  const reseller = u.type === "reseller";
+  return (
+    <div className="org-node" style={reseller ? { borderTop: "3px solid #7a5cff" } : { borderTop: "3px solid #00b8ff" }}>
+      <span style={{ width: 40, height: 40, borderRadius: "50%", background: AVATARS[u.id % AVATARS.length], color: "#fff", display: "grid", placeItems: "center", fontFamily: "var(--font-heading)", fontWeight: 700, fontSize: 13 }}>
+        {u.username.slice(0, 2).toUpperCase()}
+      </span>
+      <Link href={`/update-user/${u.id}`} style={{ fontWeight: 600, fontSize: 13, marginTop: 4, maxWidth: "100%", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{u.username}</Link>
+      <span style={{ fontSize: 11, color: "var(--color-neutral-600)", maxWidth: "100%", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{u.company}</span>
+      <span className={`tag ${reseller ? "tag-violet" : "tag-accent"}`} style={{ marginTop: 5 }}>{reseller ? "Reseller" : "User"}</span>
+      <span className="tabnum" style={{ fontSize: 12, fontWeight: 700, color: "var(--color-neutral-700)", marginTop: 2 }}>₹{fmt(u.voiceBalance)}</span>
+    </div>
+  );
+}
+
 export default function Hierarchy() {
   const { users } = useStore();
-  const [collapsed, setCollapsed] = useState<Record<number, boolean>>({});
   const childrenOf = (username: string) => users.filter((u) => u.parent === username);
-  const toggle = (id: number) => setCollapsed((c) => ({ ...c, [id]: !c[id] }));
-
-  const subtree = (username: string): number =>
-    childrenOf(username).reduce((n, k) => n + 1 + subtree(k.username), 0);
   const totalUsers = users.filter((u) => u.type === "user").length;
   const totalResellers = users.filter((u) => u.type === "reseller").length;
 
-  const renderNode = (u: User, depth: number) => {
-    const kids = childrenOf(u.username);
-    const open = !collapsed[u.id];
-    const reseller = u.type === "reseller";
+  const renderChildren = (username: string) => {
+    const kids = childrenOf(username);
+    if (kids.length === 0) return null;
     return (
-      <div key={u.id}>
-        <div className="tree-row" style={{ paddingLeft: 16 + depth * 34 }}>
-          {kids.length > 0 ? (
-            <button className="btn btn-icon" aria-label={open ? "Collapse" : "Expand"} onClick={() => toggle(u.id)} style={{ width: 24, height: 24, flex: "none", color: "var(--color-neutral-600)" }}>
-              <i className="ph-duotone ph-caret-down" style={{ fontSize: 13, transform: open ? undefined : "rotate(-90deg)", transition: "transform .15s" }} />
-            </button>
-          ) : (
-            <i className="ph-duotone ph-arrow-elbow-down-right" style={{ width: 24, flex: "none", fontSize: 14, color: "var(--color-neutral-400)", textAlign: "center" }} />
-          )}
-          <span style={{ width: 28, height: 28, flex: "none", borderRadius: "50%", background: AVATARS[u.id % AVATARS.length], color: "#fff", display: "grid", placeItems: "center", fontFamily: "var(--font-heading)", fontWeight: 700, fontSize: 10.5 }}>
-            {u.username.slice(0, 2).toUpperCase()}
-          </span>
-          <span style={{ minWidth: 0, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
-            <Link href={`/update-user/${u.id}`} style={{ fontWeight: 600, fontSize: 13.5 }}>{u.username}</Link>
-            <span style={{ fontSize: 12.5, color: "var(--color-neutral-500)" }}> · {u.company}</span>
-          </span>
-          {reseller && <span className="tag tag-violet" style={{ flex: "none" }}>reseller{kids.length > 0 ? ` · ${subtree(u.username)} below` : ""}</span>}
-          <b className="tabnum" style={{ marginLeft: "auto", flex: "none", fontSize: 13, color: "var(--color-neutral-700)" }}>₹{fmt(u.voiceBalance)}</b>
-        </div>
-        {open && kids.map((k) => renderNode(k, depth + 1))}
-      </div>
+      <ul>
+        {kids.map((u) => (
+          <li key={u.id}>
+            <NodeCard u={u} />
+            {renderChildren(u.username)}
+          </li>
+        ))}
+      </ul>
     );
   };
 
   return (
     <>
       <PageHead kicker="Users" title="Account Hierarchy" />
-      <div className="card" style={{ maxWidth: 860 }}>
-        {/* root: you */}
-        <div style={{ display: "flex", alignItems: "center", gap: 12, background: "#091f44", borderRadius: "var(--radius-md) var(--radius-md) 0 0", padding: "14px 18px", color: "#fff" }}>
-          <span style={{ width: 36, height: 36, flex: "none", borderRadius: "50%", background: "linear-gradient(135deg,#00b8ff,#4fd0ff)", color: "#00344b", display: "grid", placeItems: "center", fontFamily: "var(--font-heading)", fontWeight: 700, fontSize: 13 }}>
-            {RESELLER.name.split(" ").map((w) => w[0]).join("").slice(0, 2).toUpperCase()}
-          </span>
-          <span>
-            <span style={{ display: "block", fontWeight: 600, fontFamily: "var(--font-heading)", fontSize: 15 }}>You ({RESELLER.username})</span>
-            <span style={{ display: "block", fontSize: 12, color: "rgba(255,255,255,.66)" }}>{totalUsers} users and {totalResellers} resellers under you</span>
-          </span>
+      <div className="card" style={{ overflowX: "auto" }}>
+        <div style={{ display: "flex", gap: 18, alignItems: "center", justifyContent: "center", padding: "14px 18px 0", fontSize: 12, color: "var(--color-neutral-600)", flexWrap: "wrap" }}>
+          <span style={{ display: "inline-flex", alignItems: "center", gap: 6 }}><span style={{ width: 10, height: 10, borderRadius: 3, background: "#7a5cff" }} /> Reseller — manages accounts of their own</span>
+          <span style={{ display: "inline-flex", alignItems: "center", gap: 6 }}><span style={{ width: 10, height: 10, borderRadius: 3, background: "#00b8ff" }} /> User — runs campaigns</span>
+          <span className="text-muted">Lines show who manages whom · click a name to edit</span>
         </div>
-        <div style={{ padding: "6px 0 10px" }}>
-          {childrenOf(RESELLER.username).map((u) => renderNode(u, 0))}
-        </div>
-        <div style={{ display: "flex", gap: 10, alignItems: "center", padding: "10px 18px 12px", borderTop: "1px solid var(--color-divider)", fontSize: 12, color: "var(--color-neutral-600)" }}>
-          <i className="ph-duotone ph-info" style={{ fontSize: 14, color: "var(--color-accent-700)" }} />
-          Each account is listed under whoever manages it. Purple = reseller (has accounts of their own); click a name to edit it.
-        </div>
+        <ul className="org">
+          <li>
+            {/* root: you */}
+            <div className="org-node" style={{ background: "#091f44", border: "none", width: 190, padding: "16px 14px 14px" }}>
+              <span style={{ width: 44, height: 44, borderRadius: "50%", background: "linear-gradient(135deg,#00b8ff,#4fd0ff)", color: "#00344b", display: "grid", placeItems: "center", fontFamily: "var(--font-heading)", fontWeight: 700, fontSize: 14 }}>
+                {RESELLER.name.split(" ").map((w) => w[0]).join("").slice(0, 2).toUpperCase()}
+              </span>
+              <span style={{ fontWeight: 600, fontFamily: "var(--font-heading)", fontSize: 14, color: "#fff", marginTop: 4 }}>You</span>
+              <span style={{ fontSize: 11, color: "rgba(255,255,255,.7)" }}>{RESELLER.username}</span>
+              <span style={{ fontSize: 11.5, color: "rgba(255,255,255,.85)", marginTop: 5 }}>{totalUsers} users · {totalResellers} resellers</span>
+            </div>
+            {renderChildren(RESELLER.username)}
+          </li>
+        </ul>
       </div>
     </>
   );
