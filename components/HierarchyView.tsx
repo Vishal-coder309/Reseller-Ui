@@ -4,7 +4,6 @@ import { useCallback, useLayoutEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { useStore } from "@/lib/store";
 import { RESELLER, User } from "@/lib/mock-data";
-import { PageHead } from "@/components/ui";
 
 const AVATARS = [
   "linear-gradient(135deg,#00b8ff,#4fd0ff)", "linear-gradient(135deg,#0a6d95,#12a0c8)",
@@ -35,7 +34,7 @@ function NodeCard({ u, hit, dim }: { u: User; hit: boolean; dim: boolean }) {
   );
 }
 
-export default function Hierarchy() {
+export default function HierarchyView() {
   const { users } = useStore();
   const [query, setQuery] = useState("");
   const childrenOf = (username: string) => users.filter((u) => u.parent === username);
@@ -86,7 +85,6 @@ export default function Hierarchy() {
 
   return (
     <>
-      <PageHead kicker="Accounts" title="Account Hierarchy" />
       <div className="card">
         {/* toolbar */}
         <div style={{ display: "flex", gap: 16, alignItems: "center", padding: "13px 18px", flexWrap: "wrap", borderBottom: "1px solid var(--color-divider)" }}>

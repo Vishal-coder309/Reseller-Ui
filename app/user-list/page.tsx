@@ -6,6 +6,7 @@ import { useStore } from "@/lib/store";
 import { User, CLI_POOL, effectiveStatus } from "@/lib/mock-data";
 import { PageHead, UserStatusPill, Modal, ListCell, EmptyRow, Toast } from "@/components/ui";
 import CreateUserForm from "@/components/CreateUserForm";
+import HierarchyView from "@/components/HierarchyView";
 
 const AVATARS = [
   "linear-gradient(135deg,#00b8ff,#4fd0ff)", "linear-gradient(135deg,#0a6d95,#12a0c8)",
@@ -39,6 +40,7 @@ export default function UserList() {
   };
   const [toast, setToast] = useState<string | null>(null);
   const [addOpen, setAddOpen] = useState(false);
+  const [hierOpen, setHierOpen] = useState(false);
 
   const planName = (id: number) => voicePlans.find((p) => p.id === id)?.name ?? "—";
 
@@ -55,7 +57,12 @@ export default function UserList() {
       <PageHead
         kicker="Accounts"
         title="Accounts"
-        action={<button className="btn btn-primary" onClick={() => setAddOpen(true)}><i className="ph-duotone ph-user-plus" style={{ fontSize: 15 }} /> Add User</button>}
+        action={
+          <div style={{ display: "flex", gap: 10 }}>
+            <button className="btn btn-secondary" onClick={() => setHierOpen(true)}><i className="ph-duotone ph-tree-structure" style={{ fontSize: 15 }} /> Hierarchy</button>
+            <button className="btn btn-primary" onClick={() => setAddOpen(true)}><i className="ph-duotone ph-user-plus" style={{ fontSize: 15 }} /> Add User</button>
+          </div>
+        }
       />
 
       <div className="card">
@@ -155,6 +162,16 @@ export default function UserList() {
           onDone={(msg) => { setToast(msg); setOpenAction(null); }}
           store={store}
         />
+      )}
+
+      {hierOpen && (
+        <Modal
+          title="Account Hierarchy"
+          sub="Who manages whom across your network. Search to highlight an account."
+          onClose={() => setHierOpen(false)}
+        >
+          <HierarchyView />
+        </Modal>
       )}
 
       {addOpen && (
