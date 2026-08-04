@@ -15,7 +15,7 @@ export default function Reports() {
   };
   return (
     <>
-      <PageHead kicker="Reports" title="Reports" standfirst={STANDFIRST[tab]} />
+      <PageHead kicker="Reports" title="Summary Reports" standfirst={STANDFIRST[tab]} />
       <Tabs
         active={tab}
         onChange={setTab}

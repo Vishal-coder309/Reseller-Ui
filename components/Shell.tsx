@@ -21,7 +21,7 @@ const NAV: NavItem[] = [
   { href: "/user-list", label: "Users", icon: "ph-users-three" },
   { href: "/campaigns", label: "Campaigns", icon: "ph-broadcast" },
   { href: "/plans", label: "Plans", icon: "ph-cards" },
-  { href: "/reports", label: "Reports", icon: "ph-chart-bar" },
+  { href: "/reports", label: "Summary Reports", icon: "ph-chart-bar" },
   { href: "/voice-files", label: "Voice Files", icon: "ph-file-audio" },
 ];
 
