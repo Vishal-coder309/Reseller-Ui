@@ -16,10 +16,10 @@ function NodeCard({ u }: { u: User }) {
   const reseller = u.type === "reseller";
   return (
     <div className="org-node" style={reseller ? { borderTop: "3px solid #7a5cff" } : { borderTop: "3px solid #00b8ff" }}>
-      <span style={{ width: 40, height: 40, borderRadius: "50%", background: AVATARS[u.id % AVATARS.length], color: "#fff", display: "grid", placeItems: "center", fontFamily: "var(--font-heading)", fontWeight: 700, fontSize: 13 }}>
+      <span style={{ width: 34, height: 34, borderRadius: "50%", background: AVATARS[u.id % AVATARS.length], color: "#fff", display: "grid", placeItems: "center", fontFamily: "var(--font-heading)", fontWeight: 700, fontSize: 12 }}>
         {u.username.slice(0, 2).toUpperCase()}
       </span>
-      <Link href={`/update-user/${u.id}`} style={{ fontWeight: 600, fontSize: 13, marginTop: 4, maxWidth: "100%", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{u.username}</Link>
+      <Link href={`/update-user/${u.id}`} style={{ fontWeight: 600, fontSize: 12.5, marginTop: 3, maxWidth: "100%", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{u.username}</Link>
       <span style={{ fontSize: 11, color: "var(--color-neutral-600)", maxWidth: "100%", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{u.company}</span>
       <span className={`tag ${reseller ? "tag-violet" : "tag-accent"}`} style={{ marginTop: 5 }}>{reseller ? "Reseller" : "User"}</span>
       <span className="tabnum" style={{ fontSize: 12, fontWeight: 700, color: "var(--color-neutral-700)", marginTop: 2 }}>₹{fmt(u.voiceBalance)}</span>
@@ -60,7 +60,7 @@ export default function Hierarchy() {
         <ul className="org">
           <li>
             {/* root: you */}
-            <div className="org-node" style={{ background: "#091f44", border: "none", width: 190, padding: "16px 14px 14px" }}>
+            <div className="org-node" style={{ background: "#091f44", border: "none", width: 172, padding: "14px 12px 12px" }}>
               <span style={{ width: 44, height: 44, borderRadius: "50%", background: "linear-gradient(135deg,#00b8ff,#4fd0ff)", color: "#00344b", display: "grid", placeItems: "center", fontFamily: "var(--font-heading)", fontWeight: 700, fontSize: 14 }}>
                 {RESELLER.name.split(" ").map((w) => w[0]).join("").slice(0, 2).toUpperCase()}
               </span>
