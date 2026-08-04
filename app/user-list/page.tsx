@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useStore } from "@/lib/store";
 import { User, CLI_POOL, effectiveStatus } from "@/lib/mock-data";
 import { PageHead, UserStatusPill, Modal, Popover, ListCell, EmptyRow, Toast } from "@/components/ui";
+import CreateUserForm from "@/components/CreateUserForm";
 
 const AVATARS = [
   "linear-gradient(135deg,#00b8ff,#4fd0ff)", "linear-gradient(135deg,#0a6d95,#12a0c8)",
@@ -31,6 +32,7 @@ export default function UserList() {
   const [switchUser, setSwitchUser] = useState<User | null>(null);
   const [menuFor, setMenuFor] = useState<number | null>(null);
   const [toast, setToast] = useState<string | null>(null);
+  const [addOpen, setAddOpen] = useState(false);
 
   const planName = (id: number) => voicePlans.find((p) => p.id === id)?.name ?? "—";
 
@@ -47,7 +49,7 @@ export default function UserList() {
       <PageHead
         kicker="Users"
         title="Users"
-        action={<Link href="/create-user" className="btn btn-primary"><i className="ph-duotone ph-user-plus" style={{ fontSize: 15 }} /> Add User</Link>}
+        action={<button className="btn btn-primary" onClick={() => setAddOpen(true)}><i className="ph-duotone ph-user-plus" style={{ fontSize: 15 }} /> Add User</button>}
       />
 
       <div className="card">
@@ -146,6 +148,19 @@ export default function UserList() {
           onDone={(msg) => { setToast(msg); setOpenAction(null); }}
           store={store}
         />
+      )}
+
+      {addOpen && (
+        <Modal
+          title="Create User"
+          sub="Provision a new reseller or end user, assign a voice plan and set which modules they can use."
+          onClose={() => setAddOpen(false)}
+        >
+          <CreateUserForm
+            onToast={setToast}
+            onCreated={(username) => { setToast(`User ${username} created`); setAddOpen(false); }}
+          />
+        </Modal>
       )}
 
       {cliUser && (

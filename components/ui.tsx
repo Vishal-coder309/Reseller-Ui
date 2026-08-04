@@ -35,21 +35,26 @@ export function UserStatusPill({ status }: { status: UserStatus }) {
   return <span className={`pill ${ok ? "pill-success" : "pill-danger"}`}><span className="dot" />{status}</span>;
 }
 
-export function Modal({ title, onClose, children, actions }: { title: string; onClose: () => void; children: ReactNode; actions?: ReactNode }) {
+// Popup protocol from UI-Design: every popup is the uniform navy-header panel,
+// same as the Wallet popup. Overlay carries the sidebar offset (left: 250) inline.
+export function Modal({ title, sub, onClose, children, actions }: { title: string; sub?: string; onClose: () => void; children: ReactNode; actions?: ReactNode }) {
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => e.key === "Escape" && onClose();
     document.addEventListener("keydown", onKey);
     return () => document.removeEventListener("keydown", onKey);
   }, [onClose]);
   return (
-    <div className="overlay" onClick={onClose}>
-      <div className="modal" role="dialog" aria-modal="true" onClick={(e) => e.stopPropagation()}>
-        <div className="modal-head">
-          <h3>{title}</h3>
-          <button className="btn btn-icon" aria-label="Close" onClick={onClose}><i className="ph-duotone ph-x" style={{ fontSize: 18 }} /></button>
+    <div className="modal-overlay" style={{ left: 250 }} onClick={onClose}>
+      <div className="modal-panel" role="dialog" aria-modal="true" onClick={(e) => e.stopPropagation()}>
+        <div className="modal-header" style={{ position: "sticky", top: 0, zIndex: 2 }}>
+          <div>
+            <h3 className="modal-title">{title}</h3>
+            {sub && <p className="modal-sub">{sub}</p>}
+          </div>
+          <button className="modal-close" aria-label="Close" onClick={onClose}><i className="ph-duotone ph-x" /></button>
         </div>
-        <div className="modal-body">{children}</div>
-        {actions && <div className="modal-actions">{actions}</div>}
+        <div className="modal-body" style={{ padding: 22 }}>{children}</div>
+        {actions && <div style={{ display: "flex", justifyContent: "flex-end", gap: 10, padding: "14px 22px 20px", background: "var(--color-surface)", borderTop: "1px solid var(--color-divider)" }}>{actions}</div>}
       </div>
     </div>
   );
