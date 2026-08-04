@@ -86,7 +86,7 @@ export default function Hierarchy() {
 
   return (
     <>
-      <PageHead kicker="Users" title="Account Hierarchy" />
+      <PageHead kicker="Accounts" title="Account Hierarchy" />
       <div className="card">
         {/* toolbar */}
         <div style={{ display: "flex", gap: 16, alignItems: "center", padding: "13px 18px", flexWrap: "wrap", borderBottom: "1px solid var(--color-divider)" }}>

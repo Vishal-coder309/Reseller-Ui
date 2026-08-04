@@ -18,7 +18,7 @@ interface NavItem { href: string; label: string; icon: string; }
 // Flat, minimal nav — one item per destination. Consolidated pages carry their own tabs.
 const NAV: NavItem[] = [
   { href: "/", label: "Dashboard", icon: "ph-gauge" },
-  { href: "/user-list", label: "Users", icon: "ph-users-three" },
+  { href: "/user-list", label: "Accounts", icon: "ph-users-three" },
   { href: "/hierarchy", label: "Hierarchy", icon: "ph-tree-structure" },
   { href: "/campaigns", label: "Campaigns", icon: "ph-broadcast" },
   { href: "/plans", label: "Plans", icon: "ph-cards" },

@@ -53,8 +53,8 @@ export default function UserList() {
   return (
     <>
       <PageHead
-        kicker="Users"
-        title="Users"
+        kicker="Accounts"
+        title="Accounts"
         action={<button className="btn btn-primary" onClick={() => setAddOpen(true)}><i className="ph-duotone ph-user-plus" style={{ fontSize: 15 }} /> Add User</button>}
       />
 
