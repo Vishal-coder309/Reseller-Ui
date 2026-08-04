@@ -34,7 +34,7 @@ export interface User {
 export interface VoicePlan {
   id: number;
   name: string;
-  pulseDuration: 15 | 30 | 60;
+  pulseDuration: number; // seconds
   pulsePrice: number; // paisa
   enabled: boolean;
 }
