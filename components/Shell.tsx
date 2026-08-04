@@ -118,10 +118,6 @@ export default function Shell({ children }: { children: React.ReactNode }) {
           <button className="btn btn-icon nav-toggle" aria-label="Open menu" onClick={() => setMobileNav(true)} style={{ color: "var(--color-neutral-700)" }}>
             <i className="ph-duotone ph-list" style={{ fontSize: 22 }} />
           </button>
-          <div style={{ position: "relative", flex: 1, maxWidth: 400 }}>
-            <i className="ph-duotone ph-magnifying-glass" style={{ position: "absolute", left: 12, top: "50%", transform: "translateY(-50%)", color: "var(--color-neutral-500)", fontSize: 17 }} />
-            <input className="input" style={{ paddingLeft: 36, height: 38, borderRadius: 999 }} placeholder="Search users, campaigns…" aria-label="Search" />
-          </div>
           <div style={{ marginLeft: "auto", display: "flex", alignItems: "center", gap: 10 }}>
             <button className="btn btn-primary" onClick={() => setWalletOpen(true)}><i className="ph-duotone ph-wallet" style={{ fontSize: 16 }} /> Wallet</button>
             <div style={{ position: "relative" }}>
