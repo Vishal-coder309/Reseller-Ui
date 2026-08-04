@@ -91,14 +91,12 @@ export default function WalletModal({ onClose }: { onClose: () => void }) {
                 </div>
                 <button className="btn btn-secondary" onClick={() => setProductOpen(true)}><i className="ph-duotone ph-info" style={{ fontSize: 15 }} /> Product details</button>
               </div>
-              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16, marginTop: 18 }}>
-                {[["Voice balance", voiceBalance] as const, ["TTS balance", ttsBalance] as const].map(([l, v]) => (
-                  <div key={l} style={{ background: "var(--color-bg)", border: "1px solid var(--color-divider)", borderRadius: "var(--radius-md)", padding: "14px 16px" }}>
-                    <div style={{ fontSize: 12, color: "var(--color-neutral-600)" }}>{l}</div>
-                    <div className="tabnum" style={{ fontFamily: "var(--font-heading)", fontWeight: 700, fontSize: 28, marginTop: 5 }}>{"₹"}{fmt(v)}</div>
-                    <div style={{ fontSize: 11.5, color: "var(--color-neutral-500)", marginTop: 6 }}>Recharged out in last 30 days {"·"} {used30}</div>
-                  </div>
-                ))}
+              <div style={{ display: "grid", gridTemplateColumns: "1fr", gap: 16, marginTop: 18 }}>
+                <div style={{ background: "var(--color-bg)", border: "1px solid var(--color-divider)", borderRadius: "var(--radius-md)", padding: "14px 16px" }}>
+                  <div style={{ fontSize: 12, color: "var(--color-neutral-600)" }}>Total Balance</div>
+                  <div className="tabnum" style={{ fontFamily: "var(--font-heading)", fontWeight: 700, fontSize: 28, marginTop: 5 }}>{fmt(voiceBalance + ttsBalance)}</div>
+                  <div style={{ fontSize: 11.5, color: "var(--color-neutral-500)", marginTop: 6 }}>Used in last 30 days {"·"} {used30}</div>
+                </div>
               </div>
             </div>
             <div style={{ border: "1px solid var(--color-divider)", borderRadius: "var(--radius-md)", overflow: "hidden", background: "var(--color-surface)" }}>
