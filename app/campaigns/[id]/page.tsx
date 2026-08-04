@@ -37,7 +37,6 @@ export default function CampaignDetail({ params }: { params: Promise<{ id: strin
       <PageHead
         kicker="Manage Campaign"
         title={c.name}
-        standfirst={`Campaign #${c.id} for ${c.userName} — read-only campaign information and results.`}
         action={<Link href="/campaigns" className="btn btn-secondary">← Back</Link>}
       />
       <div style={{ display: "flex", gap: 10, marginBottom: 18 }}>

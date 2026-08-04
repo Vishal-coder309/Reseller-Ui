@@ -46,7 +46,7 @@ export default function CreateUser() {
 
   return (
     <>
-      <PageHead kicker="Manage Users" title="Create User" standfirst="Provision a new reseller or end user, assign a voice plan and set which modules they can use." />
+      <PageHead kicker="Manage Users" title="Create User" />
 
       <div className="card card-pad" style={{ maxWidth: 900 }}>
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }} data-split>

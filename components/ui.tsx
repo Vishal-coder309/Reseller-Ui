@@ -3,13 +3,13 @@
 import { ReactNode, useEffect, useState } from "react";
 import { CampaignStatus, UserStatus } from "@/lib/mock-data";
 
-export function PageHead({ kicker, title, standfirst, action }: { kicker: string; title: string; standfirst: string; action?: ReactNode }) {
+export function PageHead({ kicker, title, standfirst, action }: { kicker: string; title: string; standfirst?: string; action?: ReactNode }) {
   return (
     <div className="page-head">
       <div>
         <div className="kicker">{kicker}</div>
         <h1>{title}</h1>
-        <p className="standfirst">{standfirst}</p>
+        {standfirst && <p className="standfirst">{standfirst}</p>}
       </div>
       {action && <div>{action}</div>}
     </div>

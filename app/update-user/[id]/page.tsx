@@ -40,7 +40,7 @@ export default function UpdateUser({ params }: { params: Promise<{ id: string }>
 
   return (
     <>
-      <PageHead kicker="Manage Users" title={`Update User — ${user.username}`} standfirst="Edit profile details, plan and module allocation. User type cannot be changed." />
+      <PageHead kicker="Manage Users" title={`Update User — ${user.username}`} />
 
       <div className="card card-pad" style={{ maxWidth: 900 }}>
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }} data-split>

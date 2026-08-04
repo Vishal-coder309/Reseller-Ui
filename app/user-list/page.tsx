@@ -41,7 +41,6 @@ export default function UserList() {
       <PageHead
         kicker="Users"
         title="Users"
-        standfirst="Every reseller and end user under your account — balances, plans, validity and the actions you can take on each."
         action={<Link href="/create-user" className="btn btn-primary"><i className="ph-duotone ph-user-plus" style={{ fontSize: 15 }} /> Add User</Link>}
       />
 

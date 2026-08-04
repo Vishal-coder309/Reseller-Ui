@@ -7,15 +7,9 @@ import { PageHead, Tabs, StatusPill, EmptyRow } from "@/components/ui";
 
 export default function Reports() {
   const [tab, setTab] = useState("credits");
-  const STANDFIRST: Record<string, string> = {
-    credits: "Ledger of credit movements across your users. Covers completed campaigns from the last 3 months.",
-    summary: "Margin reconciliation per campaign: reseller pulse cost versus user pulse charge, derived from plan pricing.",
-    activity: "Login and account activity across your users, with IP address and timestamp.",
-    planlogs: "Audit trail of voice plan changes requested for your users.",
-  };
   return (
     <>
-      <PageHead kicker="Reports" title="Summary Reports" standfirst={STANDFIRST[tab]} />
+      <PageHead kicker="Reports" title="Summary Reports" />
       <Tabs
         active={tab}
         onChange={setTab}

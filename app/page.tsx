@@ -51,11 +51,7 @@ export default function Dashboard() {
 
   return (
     <>
-      <PageHead
-        kicker="Overview"
-        title="Reseller Dashboard"
-        standfirst="Live and today's campaign activity across your resellers and end users, with per-user rollups and a spend analysis."
-      />
+      <PageHead kicker="Overview" title="Reseller Dashboard" />
 
       <div className="kpi-grid" data-cols style={{ gridTemplateColumns: "repeat(4,1fr)" }}>
         {KPI_ICONS.map((k, i) => (

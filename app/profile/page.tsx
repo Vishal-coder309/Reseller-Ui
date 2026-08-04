@@ -28,7 +28,7 @@ export default function Profile() {
 
   return (
     <>
-      <PageHead kicker="Account" title="My Profile" standfirst="Your reseller account details and current balances." />
+      <PageHead kicker="Account" title="My Profile" />
       <div data-split style={{ display: "grid", gridTemplateColumns: "280px 1fr", gap: 16, alignItems: "start" }}>
         <div className="card" style={{ padding: "26px 20px", textAlign: "center" }}>
           <div style={{ width: 74, height: 74, borderRadius: "50%", background: "linear-gradient(135deg,#00b8ff,#4fd0ff)", color: "#00344b", display: "grid", placeItems: "center", fontFamily: "var(--font-heading)", fontWeight: 700, fontSize: 26, margin: "0 auto" }}>{initials}</div>

@@ -16,7 +16,7 @@ export default function VoiceFiles() {
   const [toast, setToast] = useState<string | null>(null);
   return (
     <>
-      <PageHead kicker="Voice Library" title="Voice Files" standfirst="Uploaded audio across your users. Only approved files can be dialed in campaigns." />
+      <PageHead kicker="Voice Library" title="Voice Files" />
 
       <div className="banner warn">
         <i className="ph-duotone ph-shield-warning" style={{ fontSize: 18, flex: "none", marginTop: 1 }} />

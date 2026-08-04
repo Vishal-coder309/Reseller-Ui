@@ -8,7 +8,7 @@ export default function Plans() {
   const [toast, setToast] = useState<string | null>(null);
   return (
     <>
-      <PageHead kicker="Plans" title="Plans" standfirst="Custom voice plans assignable to your users. Add a plan or toggle one to control whether it appears when assigning plans." />
+      <PageHead kicker="Plans" title="Plans" />
       <VoicePlans onToast={setToast} />
       <Toast message={toast} onDone={() => setToast(null)} />
     </>
