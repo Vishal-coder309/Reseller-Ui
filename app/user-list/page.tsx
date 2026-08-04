@@ -6,6 +6,12 @@ import { useStore } from "@/lib/store";
 import { User, CLI_POOL, effectiveStatus } from "@/lib/mock-data";
 import { PageHead, UserStatusPill, Modal, Popover, ListCell, EmptyRow, Toast } from "@/components/ui";
 
+const AVATARS = [
+  "linear-gradient(135deg,#00b8ff,#4fd0ff)", "linear-gradient(135deg,#0a6d95,#12a0c8)",
+  "linear-gradient(135deg,#12b76a,#5fd39a)", "linear-gradient(135deg,#f2a900,#ffca4d)",
+  "linear-gradient(135deg,#00415a,#0a6d95)", "linear-gradient(135deg,#7a5cff,#a08aff)",
+];
+
 type ActionKind = "add" | "remove" | "reset" | "assignVoice";
 const ACTION_TITLES: Record<ActionKind, string> = {
   add: "Add Recharge",
@@ -73,13 +79,18 @@ export default function UserList() {
                 filtered.map((u) => (
                   <tr key={u.id}>
                     <td className="tabnum">{u.id}</td>
-                    <td style={{ fontWeight: 600 }}>{u.username}</td>
+                    <td>
+                      <span style={{ display: "inline-flex", alignItems: "center", gap: 9 }}>
+                        <span style={{ width: 28, height: 28, flex: "none", borderRadius: "50%", background: AVATARS[u.id % AVATARS.length], color: "#fff", display: "grid", placeItems: "center", fontFamily: "var(--font-heading)", fontWeight: 700, fontSize: 10.5 }}>{u.username.slice(0, 2).toUpperCase()}</span>
+                        <span style={{ fontWeight: 600 }}>{u.username}</span>
+                      </span>
+                    </td>
                     <td><ListCell label="Location" values={u.location} /></td>
                     <td><ListCell label="Group" values={u.group} /></td>
                     <td><ListCell label="Module" values={u.module} /></td>
                     <td><ListCell label="Account Type" values={[u.accountType]} /></td>
                     <td className="text-muted">{u.company}</td>
-                    <td><span className={`tag ${u.type === "reseller" ? "tag-accent" : ""}`} style={u.type !== "reseller" ? { background: "var(--color-neutral-200)", color: "var(--color-neutral-800)" } : undefined}>{u.type}</span></td>
+                    <td><span className={`tag ${u.type === "reseller" ? "tag-violet" : "tag-accent"}`}>{u.type}</span></td>
                     <td className="num" style={{ fontWeight: 600 }}>{u.voiceBalance.toLocaleString("en-IN")}</td>
                     <td className="text-muted">{planName(u.voicePlanId)}</td>
                     <td><ListCell label="Allocated CLIs" values={u.clis} empty="None" /></td>

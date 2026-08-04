@@ -58,7 +58,7 @@ export default function VoiceFiles() {
                     <td className="tabnum">{f.id}</td>
                     <td style={{ fontWeight: 600 }}>{f.fileName}</td>
                     <td className="text-muted">{f.fileType}</td>
-                    <td><span className={`pill ${f.status === "Approved" ? "pill-success" : "pill-accent"}`}><span className="dot" />{f.status}</span></td>
+                    <td><span className={`pill ${f.status === "Approved" ? "pill-success" : "pill-warn"}`}><span className="dot" />{f.status}</span></td>
                     <td>{f.uploadedBy}</td>
                     <td className="text-muted">{f.account}</td>
                     <td className="text-muted">{f.remarks}</td>

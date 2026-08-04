@@ -71,7 +71,7 @@ function CreditsHistory() {
                     <td className="text-muted">{l.actionOn}</td>
                     <td className={`num ${isCredit(l.action) ? "amount-pos" : "amount-neg"}`}>{isCredit(l.action) ? "+" : "−"}₹{l.amount}</td>
                     <td className="text-muted">{l.campaign}</td>
-                    <td><span className="tag tag-accent" style={{ fontFamily: "ui-monospace,monospace" }}>{l.action}</span></td>
+                    <td><span className={`tag ${isCredit(l.action) ? "tag-green" : l.action === "campaign_deduction" ? "tag-amber" : "tag-red"}`} style={{ fontFamily: "ui-monospace,monospace" }}>{l.action}</span></td>
                     <td className="tabnum">{l.date}</td>
                   </tr>
                 ))}
@@ -199,7 +199,7 @@ function ActivityLogs() {
               rows.map((l) => (
                 <tr key={l.id}>
                   <td className="tabnum">{l.id}</td>
-                  <td><span className="tag tag-accent" style={{ fontFamily: "ui-monospace,monospace" }}>{l.action}</span></td>
+                  <td><span className={`tag ${l.action.startsWith("ADD") || l.action === "LOGIN" ? "tag-green" : l.action.startsWith("REMOVE") ? "tag-red" : "tag-accent"}`} style={{ fontFamily: "ui-monospace,monospace" }}>{l.action}</span></td>
                   <td style={{ fontWeight: 600 }}>{l.username}</td>
                   <td className="tabnum">{l.userId}</td>
                   <td className="tabnum">{l.ip}</td>

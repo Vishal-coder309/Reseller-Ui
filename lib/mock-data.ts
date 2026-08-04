@@ -176,42 +176,42 @@ export const users: User[] = [
   {
     id: 5001, username: "acme_calls", name: "Ravi Menon", email: "ravi@acme.in", mobile: "98xxxxxx21",
     company: "Acme Retail", address: "12 MG Road", pincode: "560001", location: ["Bengaluru", "Chennai"],
-    group: ["Retail"], module: ["Custom IVR", "TTS", "SMS Webhooks"], accountType: "Promotional", type: "user",
+    group: ["Retail"], module: ["Custom IVR", "SMS Webhooks"], accountType: "Promotional", type: "user",
     voiceBalance: 340, voicePlanId: 101, ttsBalance: 60, ttsPlanId: 201, parent: "DEMO_OPERATOR",
     expiry: "2026-12-31", createdAt: "2026-01-14", planType: "Prepaid", status: "Active", clis: ["04471000001"],
   },
   {
     id: 5002, username: "civic_poll", name: "Sunita Rao", email: "sunita@civic.org", mobile: "98xxxxxx22",
     company: "Civic Trust", address: "5 Anna Salai", pincode: "600002", location: ["Chennai"],
-    group: ["NGO"], module: ["TTS", "Webhooks"], accountType: "Promotional", type: "user",
+    group: ["NGO"], module: ["Webhooks"], accountType: "Promotional", type: "user",
     voiceBalance: 120, voicePlanId: 102, ttsBalance: 15, ttsPlanId: 202, parent: "DEMO_OPERATOR",
     expiry: "2026-09-15", createdAt: "2026-02-02", planType: "Prepaid", status: "Active", clis: ["04471000002", "04471000003"],
   },
   {
     id: 5003, username: "loanhub", name: "Imran Shaikh", email: "imran@loanhub.in", mobile: "98xxxxxx23",
     company: "LoanHub Finance", address: "88 SB Road", pincode: "411016", location: ["Pune", "Mumbai"],
-    group: ["Finance"], module: ["Custom IVR", "Webhooks", "TTS", "SMS Webhooks"], accountType: "Promotional",
+    group: ["Finance"], module: ["Custom IVR", "Webhooks", "SMS Webhooks"], accountType: "Promotional",
     type: "reseller", voiceBalance: 900, voicePlanId: 101, ttsBalance: 200, ttsPlanId: 201, parent: "DEMO_OPERATOR",
     expiry: "2027-03-01", createdAt: "2025-11-20", planType: "Postpaid", status: "Active", clis: ["02240000010"],
   },
   {
     id: 5004, username: "shopmate", name: "Neha Gupta", email: "neha@shopmate.in", mobile: "98xxxxxx24",
     company: "ShopMate", address: "22 Park St", pincode: "700016", location: ["Kolkata"],
-    group: ["Retail"], module: ["TTS"], accountType: "Promotional", type: "user",
+    group: ["Retail"], module: ["Custom IVR"], accountType: "Promotional", type: "user",
     voiceBalance: 0, voicePlanId: 103, ttsBalance: 5, ttsPlanId: 201, parent: "DEMO_OPERATOR",
     expiry: "2026-06-30", createdAt: "2026-01-05", planType: "Prepaid", status: "Validity Expired", clis: [],
   },
   {
     id: 5005, username: "healthline", name: "Dr. Anil Kumar", email: "anil@healthline.in", mobile: "98xxxxxx25",
     company: "HealthLine Clinics", address: "9 Residency Rd", pincode: "500034", location: ["Hyderabad"],
-    group: ["Healthcare"], module: ["Custom IVR", "TTS"], accountType: "Promotional", type: "user",
+    group: ["Healthcare"], module: ["Custom IVR"], accountType: "Promotional", type: "user",
     voiceBalance: 210, voicePlanId: 102, ttsBalance: 45, ttsPlanId: 202, parent: "DEMO_OPERATOR",
     expiry: "2026-11-11", createdAt: "2026-03-18", planType: "Prepaid", status: "Active", clis: ["04071000005"],
   },
   {
     id: 5006, username: "eduwave", name: "Priya Nair", email: "priya@eduwave.in", mobile: "98xxxxxx26",
     company: "EduWave", address: "3 FC Road", pincode: "411004", location: ["Pune"],
-    group: ["Education"], module: ["TTS", "SMS Webhooks"], accountType: "Promotional", type: "user",
+    group: ["Education"], module: ["SMS Webhooks"], accountType: "Promotional", type: "user",
     voiceBalance: 75, voicePlanId: 101, ttsBalance: 22, ttsPlanId: 201, parent: "DEMO_OPERATOR",
     expiry: "2026-08-01", createdAt: "2026-04-09", planType: "Prepaid", status: "Active", clis: ["02040000006"],
   },
@@ -279,7 +279,7 @@ export const voiceFiles: VoiceFile[] = [
   { id: 4005, fileName: "poll-q1.wav", fileType: "menu", status: "Pending", uploadedBy: "civic_poll", account: "Civic Trust", remarks: "Awaiting review" },
 ];
 
-export const MODULE_OPTIONS = ["Custom IVR", "Webhooks", "TTS", "SMS Webhooks"];
+export const MODULE_OPTIONS = ["Custom IVR", "Webhooks", "SMS Webhooks"];
 
 // A user's effective status: an expiry date in the past forces "Validity Expired".
 export function effectiveStatus(u: Pick<User, "expiry" | "status">): UserStatus {

@@ -4,6 +4,22 @@ import { Fragment, useMemo, useState } from "react";
 import { campaigns, Campaign, CampaignStatus } from "@/lib/mock-data";
 import { StatusPill, EmptyRow, Toast } from "@/components/ui";
 
+// colour language from UI-Design: gradient avatar chips + one tone per stat card
+const AVATARS = [
+  "linear-gradient(135deg,#00b8ff,#4fd0ff)", "linear-gradient(135deg,#0a6d95,#12a0c8)",
+  "linear-gradient(135deg,#12b76a,#5fd39a)", "linear-gradient(135deg,#f2a900,#ffca4d)",
+  "linear-gradient(135deg,#00415a,#0a6d95)", "linear-gradient(135deg,#7a5cff,#a08aff)",
+];
+const initials = (name: string) => name.split(/\s+/).map((w) => w[0]).join("").slice(0, 2).toUpperCase();
+const CHIP_TONES = [
+  { icon: "ph-stack", hex: "#00b8ff", chip: "linear-gradient(135deg,#e2f6ff,#c3ecff)", fg: "#00527c" },
+  { icon: "ph-phone-outgoing", hex: "#7a5cff", chip: "linear-gradient(135deg,#efeaff,#ddd3ff)", fg: "#4c33c4" },
+  { icon: "ph-hourglass-medium", hex: "#f2a900", chip: "linear-gradient(135deg,#fef4e0,#fde6bd)", fg: "#a86a00" },
+  { icon: "ph-phone-call", hex: "#12b76a", chip: "linear-gradient(135deg,#e7f7ef,#cdeeda)", fg: "#067a47" },
+  { icon: "ph-prohibit", hex: "#e5484d", chip: "linear-gradient(135deg,#fdecea,#f6d0cc)", fg: "#b42318" },
+  { icon: "ph-arrows-clockwise", hex: "#00415a", chip: "linear-gradient(135deg,#e2f6ff,#bfebff)", fg: "#00415a" },
+];
+
 // Shared campaign summary: stat chips + filterable table.
 // `kind` selects the seed subset; `userWise` groups rows under per-user header rows + date filters.
 export function CampaignSummary({ kind, userWise }: { kind: "live" | "prompt"; userWise?: boolean }) {
@@ -51,12 +67,20 @@ export function CampaignSummary({ kind, userWise }: { kind: "live" | "prompt"; u
   return (
     <>
       <div className="kpi-grid" data-cols style={{ gridTemplateColumns: "repeat(6,1fr)" }}>
-        {chips.map((c) => (
-          <div className="kpi" key={c.label}>
-            <div className="kpi-label">{c.label}</div>
-            <div className="kpi-value" style={{ fontSize: 22 }}>{c.value.toLocaleString("en-IN")}</div>
-          </div>
-        ))}
+        {chips.map((c, i) => {
+          const t = CHIP_TONES[i % CHIP_TONES.length];
+          return (
+            <div key={c.label} style={{ background: "#fff", border: "1px solid rgba(0,65,90,0.08)", borderTop: `3px solid ${t.hex}`, borderRadius: "var(--radius-md)", boxShadow: "var(--shadow-sm)", padding: "15px 16px", minWidth: 0 }}>
+              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 8 }}>
+                <div style={{ fontSize: 11.5, color: "var(--color-neutral-600)" }}>{c.label}</div>
+                <div style={{ width: 32, height: 32, flex: "none", borderRadius: 9, display: "grid", placeItems: "center", background: t.chip, color: t.fg }}>
+                  <i className={`ph-duotone ${t.icon}`} style={{ fontSize: 17 }} />
+                </div>
+              </div>
+              <div className="tabnum" style={{ fontFamily: "var(--font-heading)", fontWeight: 700, fontSize: 22, letterSpacing: "-.02em", marginTop: 4 }}>{c.value.toLocaleString("en-IN")}</div>
+            </div>
+          );
+        })}
       </div>
 
       <div className="card">
@@ -101,7 +125,12 @@ export function CampaignSummary({ kind, userWise }: { kind: "live" | "prompt"; u
                   <tr>
                     <td><input type="checkbox" checked={selected.has(c.id)} onChange={() => toggle(c.id)} /></td>
                     <td className="tabnum">{c.id}</td>
-                    <td style={{ fontWeight: 600 }}><a href={`/campaigns/${c.id}`}>{c.name}</a></td>
+                    <td>
+                      <span style={{ display: "inline-flex", alignItems: "center", gap: 10 }}>
+                        <span style={{ width: 30, height: 30, flex: "none", borderRadius: 9, background: AVATARS[c.id % AVATARS.length], color: "#fff", display: "grid", placeItems: "center", fontFamily: "var(--font-heading)", fontWeight: 700, fontSize: 11 }}>{initials(c.name)}</span>
+                        <a href={`/campaigns/${c.id}`} style={{ fontWeight: 600 }}>{c.name}</a>
+                      </span>
+                    </td>
                     <td>{c.userName}</td>
                     <td className="text-muted">{c.parentUsername}</td>
                     <td><StatusPill status={c.status} /></td>
@@ -187,7 +216,12 @@ export function HistorySummary() {
                 rows.map((c) => (
                   <tr key={c.id}>
                     <td className="tabnum">{c.id}</td>
-                    <td style={{ fontWeight: 600 }}><a href={`/campaigns/${c.id}`}>{c.name}</a></td>
+                    <td>
+                      <span style={{ display: "inline-flex", alignItems: "center", gap: 10 }}>
+                        <span style={{ width: 30, height: 30, flex: "none", borderRadius: 9, background: AVATARS[c.id % AVATARS.length], color: "#fff", display: "grid", placeItems: "center", fontFamily: "var(--font-heading)", fontWeight: 700, fontSize: 11 }}>{initials(c.name)}</span>
+                        <a href={`/campaigns/${c.id}`} style={{ fontWeight: 600 }}>{c.name}</a>
+                      </span>
+                    </td>
                     <td>{c.userName}</td>
                     <td className="text-muted">{c.type}</td>
                     <td><StatusPill status={c.status} /></td>

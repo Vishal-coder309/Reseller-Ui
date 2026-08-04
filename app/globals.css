@@ -157,10 +157,18 @@ details.adv[open] > summary::before { transform: rotate(90deg); }
 .pill-danger .dot { background: var(--color-danger); }
 .pill-neutral { background: var(--color-neutral-200); color: var(--color-neutral-800); }
 .pill-neutral .dot { background: var(--color-neutral-500); }
+.pill-warn { background: #fbf0dc; color: #9a6a00; }
+.pill-warn .dot { background: #f2a900; }
+.pill-sched { background: #e2f6ff; color: #00527c; }
+.pill-sched .dot { background: #00b8ff; }
 
 /* ===== tags ===== */
 .tag { display: inline-flex; align-items: center; font-size: 11px; letter-spacing: 0.02em; padding: 3px 9px; border-radius: 6px; }
 .tag-accent { background: var(--color-accent-100); color: var(--color-accent-800); }
+.tag-green { background: #e7f7ef; color: #067a47; }
+.tag-red { background: #fdecea; color: #b42318; }
+.tag-amber { background: #fbf0dc; color: #9a6a00; }
+.tag-violet { background: #efeaff; color: #4c33c4; }
 
 /* ===== page header (kicker / h1 / standfirst) ===== */
 .page-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 20px; flex-wrap: wrap; margin-bottom: 26px; }

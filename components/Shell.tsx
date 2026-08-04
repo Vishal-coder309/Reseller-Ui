@@ -98,7 +98,7 @@ export default function Shell({ children }: { children: React.ReactNode }) {
             </div>
           )}
           <button onClick={() => setMenuOpen((o) => !o)} aria-label="Account menu" style={{ display: "flex", alignItems: "center", gap: 10, padding: "8px 10px", borderRadius: "var(--radius-md)", background: "var(--color-bg)", width: "100%", border: "none", cursor: "pointer", textAlign: "left", fontFamily: "var(--font-body)" }}>
-            <div style={{ width: 34, height: 34, borderRadius: "50%", background: "var(--color-accent)", color: "var(--color-bg)", display: "grid", placeItems: "center", fontFamily: "var(--font-heading)", fontWeight: 600, fontSize: 13, flex: "none" }}>VY</div>
+            <div style={{ width: 34, height: 34, borderRadius: "50%", background: "linear-gradient(135deg,#00b8ff,#4fd0ff)", color: "#00344b", display: "grid", placeItems: "center", fontFamily: "var(--font-heading)", fontWeight: 700, fontSize: 13, flex: "none" }}>{RESELLER.name.split(" ").map((w) => w[0]).join("").slice(0, 2).toUpperCase()}</div>
             <div style={{ minWidth: 0, flex: 1, lineHeight: 1.2 }}>
               <div style={{ fontSize: 13, fontWeight: 600, fontFamily: "var(--font-heading)" }}>{RESELLER.name}</div>
               <div style={{ fontSize: 11, color: "var(--color-neutral-600)" }}>Reseller Operator</div>

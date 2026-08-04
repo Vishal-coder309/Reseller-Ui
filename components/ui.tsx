@@ -16,11 +16,12 @@ export function PageHead({ kicker, title, standfirst, action }: { kicker: string
   );
 }
 
+// status → colour follows the UI-Design pill map: green live/done, amber paused, blue scheduled, red failed
 const CAMPAIGN_PILL: Record<CampaignStatus, { cls: string; label: string }> = {
-  running: { cls: "pill-accent", label: "Running" },
-  paused: { cls: "pill-neutral", label: "Paused" },
+  running: { cls: "pill-success", label: "Running" },
+  paused: { cls: "pill-warn", label: "Paused" },
   complete: { cls: "pill-success", label: "Complete" },
-  scheduled: { cls: "pill-accent", label: "Scheduled" },
+  scheduled: { cls: "pill-sched", label: "Scheduled" },
   failed: { cls: "pill-danger", label: "Failed" },
 };
 
