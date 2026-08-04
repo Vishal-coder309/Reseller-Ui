@@ -24,10 +24,23 @@ export default function VoiceFiles() {
             <span className="info-tip" tabIndex={0} aria-label="Restricted voice content policy">
               <i className="ph-duotone ph-info" style={{ fontSize: 17, color: "var(--color-accent-2-700)", cursor: "help" }} />
               <span className="info-tip-pop">
-                <b>Restricted Voice Content</b> — the following are rejected on review:
-                <ul style={{ margin: "6px 0 0", paddingLeft: 18 }}>
-                  {RESTRICTED.map((r) => <li key={r}>{r}</li>)}
-                </ul>
+                <span className="info-tip-head">
+                  <span style={{ width: 32, height: 32, flex: "none", borderRadius: "50%", background: "var(--color-accent-2-100)", color: "var(--color-accent-2-700)", display: "grid", placeItems: "center", boxShadow: "inset 0 0 0 1px var(--color-accent-2-200)" }}>
+                    <i className="ph-duotone ph-shield-warning" style={{ fontSize: 17 }} />
+                  </span>
+                  <span style={{ lineHeight: 1.3 }}>
+                    <b style={{ fontSize: 13, color: "var(--color-accent-2-800)" }}>Restricted Voice Content</b>
+                    <span style={{ display: "block", fontSize: 11.5, color: "var(--color-accent-2-700)", marginTop: 1 }}>Rejected on admin review</span>
+                  </span>
+                </span>
+                <span style={{ display: "block", padding: "12px 15px 14px" }}>
+                  {RESTRICTED.map((r) => (
+                    <span className="info-tip-row" key={r}>
+                      <i className="ph-duotone ph-prohibit" style={{ fontSize: 14, color: "var(--color-accent-2)", flex: "none", marginTop: 2 }} />
+                      <span style={{ color: "var(--color-neutral-700)" }}>{r}</span>
+                    </span>
+                  ))}
+                </span>
               </span>
             </span>
           </h3>

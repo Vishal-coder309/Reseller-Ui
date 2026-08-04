@@ -241,11 +241,19 @@ details.adv[open] > summary::before { transform: rotate(90deg); }
 /* info-tip: hover/focus popover behind an (i) icon (ported from UI-Design) */
 .info-tip { position: relative; display: inline-flex; }
 .info-tip .info-tip-pop {
-  display: none; position: absolute; top: calc(100% + 8px); left: -6px; width: 360px;
-  background: var(--color-surface); border: 1px solid var(--color-divider); border-radius: var(--radius-md);
-  box-shadow: var(--shadow-md); padding: 12px 14px; z-index: 40; font-size: 12.5px; line-height: 1.5; font-weight: 400;
+  display: none; position: absolute; top: calc(100% + 10px); left: -10px; width: 390px;
+  background: var(--color-surface); border: 1px solid var(--color-divider); border-radius: 14px;
+  box-shadow: var(--shadow-lg); z-index: 40; font-size: 12.5px; line-height: 1.5; font-weight: 400;
+  overflow: hidden; text-transform: none; letter-spacing: normal;
 }
-.info-tip:hover .info-tip-pop, .info-tip:focus-within .info-tip-pop { display: block; }
+.info-tip:hover .info-tip-pop, .info-tip:focus-within .info-tip-pop { display: block; animation: tipIn .16s cubic-bezier(0.22, 1, 0.36, 1); }
+@keyframes tipIn { from { opacity: 0; transform: translateY(-5px); } to { opacity: 1; transform: none; } }
+.info-tip-head {
+  display: flex; align-items: center; gap: 11px; padding: 13px 15px;
+  background: linear-gradient(135deg, #fdecea, #fdf3f1); border-bottom: 1px solid var(--color-accent-2-200);
+}
+.info-tip-row { display: flex; align-items: flex-start; gap: 9px; }
+.info-tip-row + .info-tip-row { margin-top: 9px; }
 
 /* ===== popover ===== */
 .pop-wrap { position: relative; display: inline-block; }
