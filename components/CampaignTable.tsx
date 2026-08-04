@@ -26,23 +26,7 @@ export function CampaignSummary({ kind, userWise }: { kind: "live" | "prompt"; u
   const [status, setStatus] = useState<"all" | CampaignStatus>("all");
   const [username, setUsername] = useState("all");
   const [selected, setSelected] = useState<Set<number>>(new Set());
-  // ponytail: seed campaigns aren't in the store — pause/resume/stop overrides are session-local
-  const [override, setOverride] = useState<Record<number, CampaignStatus>>({});
-  const [toast, setToast] = useState<string | null>(null);
-  // "Take Action" dropdown: fixed-position so it escapes the table's overflow scroll; flips up near the viewport bottom
-  const [menu, setMenu] = useState<{ id: number; left: number; y: number; up: boolean } | null>(null);
-  const base = campaigns.filter((c) => c.kind === kind).map((c) => ({ ...c, status: override[c.id] ?? c.status }));
-
-  const toggleMenu = (id: number, e: React.MouseEvent<HTMLButtonElement>) => {
-    const rc = e.currentTarget.getBoundingClientRect();
-    const up = rc.bottom > window.innerHeight - 240;
-    setMenu((m) => (m && m.id === id ? null : { id, left: rc.right, up, y: up ? window.innerHeight - rc.top + 4 : rc.bottom + 4 }));
-  };
-  const setCampaignStatus = (c: Campaign, s: CampaignStatus) => {
-    setOverride((o) => ({ ...o, [c.id]: s }));
-    setMenu(null);
-    setToast(`"${c.name}" ${s === "paused" ? "paused" : s === "running" ? "resumed" : "stopped"}.`);
-  };
+  const base = campaigns.filter((c) => c.kind === kind);
 
   const rows = useMemo(() => {
     const f = base.filter((c) => (status === "all" || c.status === status) && (username === "all" || c.userName === username));
@@ -110,14 +94,14 @@ export function CampaignSummary({ kind, userWise }: { kind: "live" | "prompt"; u
               <th><input type="checkbox" checked={allChecked} onChange={() => setSelected(allChecked ? new Set() : new Set(rows.map((r) => r.id)))} /></th>
               <th>Campaign Id</th><th>Name</th><th>User</th><th>Parent</th><th>Status</th><th className="num">Channels</th><th>Type</th>
               <th>Start</th><th>End</th><th className="num">Numbers</th><th className="num">Dialed</th><th className="num">Pending</th><th className="num">Connected</th>
-              <th className="num">Pulses</th><th className="num">DnD</th><th className="num">DTMF</th><th className="num">SMS</th><th className="num">Retry</th><th className="num">Vars</th><th>Pause</th><th>Action</th>
+              <th className="num">Pulses</th><th className="num">DnD</th><th className="num">DTMF</th><th className="num">SMS</th><th className="num">Retry</th><th className="num">Vars</th><th>Pause</th>
             </tr></thead>
             <tbody>
-              {rows.length === 0 ? <EmptyRow colSpan={22} icon="ph-broadcast" message="No campaigns match this filter." /> :
+              {rows.length === 0 ? <EmptyRow colSpan={21} icon="ph-broadcast" message="No campaigns match this filter." /> :
                 rows.map((c, i) => (
                   <Fragment key={c.id}>
                     {userWise && (i === 0 || rows[i - 1].userName !== c.userName) && (
-                      <tr><td colSpan={22} style={{ background: "var(--color-bg)", fontWeight: 600, fontFamily: "var(--font-heading)", fontSize: 13 }}>
+                      <tr><td colSpan={21} style={{ background: "var(--color-bg)", fontWeight: 600, fontFamily: "var(--font-heading)", fontSize: 13 }}>
                         <i className="ph-duotone ph-user-circle" style={{ fontSize: 16, verticalAlign: "-3px", color: "var(--color-accent-700)", marginRight: 7 }} />
                         {c.userName} <span className="text-muted" style={{ fontWeight: 400 }}>· {rows.filter((r) => r.userName === c.userName).length} campaign{rows.filter((r) => r.userName === c.userName).length > 1 ? "s" : ""}</span>
                       </td></tr>
@@ -149,17 +133,6 @@ export function CampaignSummary({ kind, userWise }: { kind: "live" | "prompt"; u
                     <td className="num">{c.retryCount}</td>
                     <td className="num">{c.variableCount}</td>
                     <td className="text-muted">{c.pauseTime}</td>
-                    <td>{c.status !== "running" && c.status !== "paused" && c.status !== "scheduled" ? <span className="text-muted">—</span> : <div style={{ position: "relative" }}>
-                      <button className="btn btn-secondary" onClick={(e) => toggleMenu(c.id, e)}>Take Action <i className="ph-duotone ph-caret-down" style={{ fontSize: 13 }} /></button>
-                      {menu && menu.id === c.id && (<>
-                        <div onClick={() => setMenu(null)} style={{ position: "fixed", inset: 0, zIndex: 40 }} />
-                        <div style={{ position: "fixed", left: menu.left, [menu.up ? "bottom" : "top"]: menu.y, transform: "translateX(-100%)", zIndex: 41, display: "flex", flexDirection: "column", width: 200, background: "var(--color-surface)", border: "1px solid var(--color-divider)", borderRadius: "var(--radius-md)", boxShadow: "var(--shadow-lg)", overflow: "hidden", padding: "5px 0" }}>
-                          {c.status === "running" && (<button className="btn btn-ghost" onClick={() => setCampaignStatus(c, "paused")} style={{ width: "100%", margin: 0, justifyContent: "flex-start", borderRadius: 0 }}><i className="ph-duotone ph-pause" style={{ fontSize: 16 }} /> Pause</button>)}
-                          {c.status === "paused" && (<button className="btn btn-ghost" onClick={() => setCampaignStatus(c, "running")} style={{ width: "100%", margin: 0, justifyContent: "flex-start", borderRadius: 0 }}><i className="ph-duotone ph-play" style={{ fontSize: 16 }} /> Resume</button>)}
-                          {(c.status === "running" || c.status === "paused" || c.status === "scheduled") && (<button className="btn btn-ghost" onClick={() => { if (window.confirm(`Stop "${c.name}"? This ends the campaign and cannot be undone.`)) setCampaignStatus(c, "complete"); }} style={{ width: "100%", margin: 0, justifyContent: "flex-start", borderRadius: 0, color: "var(--color-accent-2-700)" }}><i className="ph-duotone ph-stop" style={{ fontSize: 16 }} /> Stop</button>)}
-                        </div>
-                      </>)}
-                    </div>}</td>
                   </tr>
                   </Fragment>
                 ))}
@@ -167,7 +140,6 @@ export function CampaignSummary({ kind, userWise }: { kind: "live" | "prompt"; u
           </table>
         </div>
       </div>
-      <Toast message={toast} onDone={() => setToast(null)} />
     </>
   );
 }

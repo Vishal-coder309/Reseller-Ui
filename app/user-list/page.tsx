@@ -4,7 +4,7 @@ import { useMemo, useState } from "react";
 import Link from "next/link";
 import { useStore } from "@/lib/store";
 import { User, CLI_POOL, effectiveStatus } from "@/lib/mock-data";
-import { PageHead, UserStatusPill, Modal, Popover, ListCell, EmptyRow, Toast } from "@/components/ui";
+import { PageHead, UserStatusPill, Modal, ListCell, EmptyRow, Toast } from "@/components/ui";
 import CreateUserForm from "@/components/CreateUserForm";
 
 const AVATARS = [
@@ -30,7 +30,13 @@ export default function UserList() {
   const [openAction, setOpenAction] = useState<{ user: User; kind: ActionKind } | null>(null);
   const [cliUser, setCliUser] = useState<User | null>(null);
   const [switchUser, setSwitchUser] = useState<User | null>(null);
-  const [menuFor, setMenuFor] = useState<number | null>(null);
+  // fixed-position so the menu escapes the table's overflow scroll; flips up near the viewport bottom
+  const [menuFor, setMenuFor] = useState<{ id: number; left: number; y: number; up: boolean } | null>(null);
+  const toggleMenu = (id: number, e: React.MouseEvent<HTMLButtonElement>) => {
+    const rc = e.currentTarget.getBoundingClientRect();
+    const up = rc.bottom > window.innerHeight - 300;
+    setMenuFor((m) => (m && m.id === id ? null : { id, left: rc.right, up, y: up ? window.innerHeight - rc.top + 4 : rc.bottom + 4 }));
+  };
   const [toast, setToast] = useState<string | null>(null);
   const [addOpen, setAddOpen] = useState(false);
 
@@ -106,11 +112,12 @@ export default function UserList() {
                       </button>
                     </td>
                     <td style={{ position: "relative" }}>
-                      <button className="btn btn-secondary btn-sm" onClick={(e) => { e.stopPropagation(); setMenuFor(menuFor === u.id ? null : u.id); }}>
+                      <button className="btn btn-secondary btn-sm" onClick={(e) => { e.stopPropagation(); toggleMenu(u.id, e); }}>
                         Take Action <i className="ph-duotone ph-caret-down" style={{ fontSize: 13 }} />
                       </button>
-                      {menuFor === u.id && (
-                        <Popover onClose={() => setMenuFor(null)} align="right">
+                      {menuFor && menuFor.id === u.id && (<>
+                        <div onClick={() => setMenuFor(null)} style={{ position: "fixed", inset: 0, zIndex: 40 }} />
+                        <div style={{ position: "fixed", left: menuFor.left, [menuFor.up ? "bottom" : "top"]: menuFor.y, transform: "translateX(-100%)", zIndex: 41, width: 220, background: "var(--color-surface)", border: "1px solid var(--color-divider)", borderRadius: "var(--radius-md)", boxShadow: "var(--shadow-lg)", overflow: "hidden", padding: "5px 0" }}>
                           <Link href={`/update-user/${u.id}`} className="menu-item"><i className="ph-duotone ph-pencil-simple" /> Edit User</Link>
                           <button className="menu-item" onClick={() => { setOpenAction({ user: u, kind: "assignVoice" }); setMenuFor(null); }}><i className="ph-duotone ph-phone-call" /> Assign Voice Plan</button>
                           <div style={{ height: 1, background: "var(--color-divider)", margin: "4px 0" }} />
@@ -118,8 +125,8 @@ export default function UserList() {
                           <button className="menu-item" onClick={() => { setOpenAction({ user: u, kind: "remove" }); setMenuFor(null); }}><i className="ph-duotone ph-minus-circle" /> Remove Recharge</button>
                           <div style={{ height: 1, background: "var(--color-divider)", margin: "4px 0" }} />
                           <button className="menu-item" onClick={() => { setOpenAction({ user: u, kind: "reset" }); setMenuFor(null); }}><i className="ph-duotone ph-key" /> Reset Password</button>
-                        </Popover>
-                      )}
+                        </div>
+                      </>)}
                     </td>
                     <td style={{ position: "relative" }}>
                       <button className="btn btn-secondary btn-sm" onClick={() => setCliUser(u)}><i className="ph-duotone ph-phone-plus" style={{ fontSize: 14 }} /> CLI</button>
