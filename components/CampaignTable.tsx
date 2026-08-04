@@ -92,16 +92,16 @@ export function CampaignSummary({ kind, userWise }: { kind: "live" | "prompt"; u
           <table className="table">
             <thead><tr>
               <th><input type="checkbox" checked={allChecked} onChange={() => setSelected(allChecked ? new Set() : new Set(rows.map((r) => r.id)))} /></th>
-              <th>Campaign Id</th><th>Name</th><th>User</th><th>Parent</th><th>Status</th><th>Product</th><th>Type</th>
+              <th>Campaign Id</th><th>Name</th><th>User</th><th>Parent</th><th>Status</th><th>Product</th><th>Type</th><th>Mode</th>
               <th>Start</th><th>End</th><th className="num">Numbers</th><th className="num">Dialed</th><th className="num">Pending</th><th className="num">Connected</th>
               <th className="num">Pulses</th><th className="num">DnD</th><th className="num">DTMF</th><th className="num">SMS</th><th className="num">Retry</th><th className="num">Vars</th>
             </tr></thead>
             <tbody>
-              {rows.length === 0 ? <EmptyRow colSpan={20} icon="ph-broadcast" message="No campaigns match this filter." /> :
+              {rows.length === 0 ? <EmptyRow colSpan={21} icon="ph-broadcast" message="No campaigns match this filter." /> :
                 rows.map((c, i) => (
                   <Fragment key={c.id}>
                     {userWise && (i === 0 || rows[i - 1].userName !== c.userName) && (
-                      <tr><td colSpan={20} style={{ background: "var(--color-bg)", fontWeight: 600, fontFamily: "var(--font-heading)", fontSize: 13 }}>
+                      <tr><td colSpan={21} style={{ background: "var(--color-bg)", fontWeight: 600, fontFamily: "var(--font-heading)", fontSize: 13 }}>
                         <i className="ph-duotone ph-user-circle" style={{ fontSize: 16, verticalAlign: "-3px", color: "var(--color-accent-700)", marginRight: 7 }} />
                         {c.userName} <span className="text-muted" style={{ fontWeight: 400 }}>· {rows.filter((r) => r.userName === c.userName).length} campaign{rows.filter((r) => r.userName === c.userName).length > 1 ? "s" : ""}</span>
                       </td></tr>
@@ -120,6 +120,7 @@ export function CampaignSummary({ kind, userWise }: { kind: "live" | "prompt"; u
                     <td><StatusPill status={c.status} /></td>
                     <td className="text-muted tabnum">{c.pulseDuration}s</td>
                     <td className="text-muted">{c.type}</td>
+                    <td><span className={`tag ${c.mode === "API" ? "tag-violet" : "tag-accent"}`}>{c.mode}</span></td>
                     <td className="tabnum">{c.startTime}</td>
                     <td className="tabnum">{c.endTime}</td>
                     <td className="num">{c.totalNumbers.toLocaleString("en-IN")}</td>
@@ -179,11 +180,11 @@ export function HistorySummary() {
         <div className="table-wrap">
           <table className="table">
             <thead><tr>
-              <th>Campaign Id</th><th>Name</th><th>User</th><th>Type</th><th>Status</th><th className="num">Numbers</th><th className="num">Dialed</th>
+              <th>Campaign Id</th><th>Name</th><th>User</th><th>Type</th><th>Mode</th><th>Status</th><th className="num">Numbers</th><th className="num">Dialed</th>
               <th className="num">Connected</th><th className="num">Expenditure (₹)</th><th>Start</th><th>End</th><th>Action</th>
             </tr></thead>
             <tbody>
-              {rows.length === 0 ? <EmptyRow colSpan={12} icon="ph-clock-clockwise" message="No past campaigns in this range." /> :
+              {rows.length === 0 ? <EmptyRow colSpan={13} icon="ph-clock-clockwise" message="No past campaigns in this range." /> :
                 rows.map((c) => (
                   <tr key={c.id}>
                     <td className="tabnum">{c.id}</td>
@@ -195,6 +196,7 @@ export function HistorySummary() {
                     </td>
                     <td>{c.userName}</td>
                     <td className="text-muted">{c.type}</td>
+                    <td><span className={`tag ${c.mode === "API" ? "tag-violet" : "tag-accent"}`}>{c.mode}</span></td>
                     <td><StatusPill status={c.status} /></td>
                     <td className="num">{c.totalNumbers.toLocaleString("en-IN")}</td>
                     <td className="num">{c.callsDialed.toLocaleString("en-IN")}</td>

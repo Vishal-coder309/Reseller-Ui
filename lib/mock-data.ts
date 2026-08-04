@@ -49,7 +49,8 @@ export interface TtsPlan {
 
 export type CampaignStatus = "running" | "paused" | "complete" | "scheduled" | "failed";
 export type CampaignKind = "live" | "prompt" | "history";
-export type CampaignType = "Simple IVR" | "DTMF" | "Call Patch" | "Custom IVR";
+export type CampaignType = "OBD" | "DTMF" | "Call Patch" | "Repeat" | "HangUp";
+export type CampaignMode = "Web" | "API";
 
 export interface Campaign {
   id: number;
@@ -60,6 +61,7 @@ export interface Campaign {
   status: CampaignStatus;
   kind: CampaignKind;
   type: CampaignType;
+  mode: CampaignMode;
   channels: number;
   startTime: string;
   endTime: string;
@@ -221,7 +223,7 @@ function mkCampaign(p: Partial<Campaign> & Pick<Campaign, "id" | "name" | "userI
   const dialed = p.callsDialed ?? 0;
   const connected = p.connected ?? Math.round(dialed * 0.45);
   return {
-    parentUsername: "DEMO_OPERATOR", channels: 30, startTime: "2026-08-03 09:15", endTime: "2026-08-03 09:52",
+    parentUsername: "DEMO_OPERATOR", mode: "Web", channels: 30, startTime: "2026-08-03 09:15", endTime: "2026-08-03 09:52",
     totalNumbers: dialed, callsDialed: dialed, pending: 0, connected, totalPulses: connected * 2, dnd: Math.round(dialed * 0.03),
     dtmf: Math.round(connected * 0.3), dtmf1: Math.round(connected * 0.18), dtmf2: Math.round(connected * 0.08),
     smsCount: Math.round(connected * 0.5), retryCount: 1, retries: Math.round(dialed * 0.1), pauseTime: "-", variableCount: 0,
@@ -233,20 +235,20 @@ function mkCampaign(p: Partial<Campaign> & Pick<Campaign, "id" | "name" | "userI
 }
 
 export const campaigns: Campaign[] = [
-  mkCampaign({ id: 9001, name: "Diwali Push 01", userId: 5001, userName: "acme_calls", status: "running", kind: "live", type: "Simple IVR", callsDialed: 4200, pending: 1800, channels: 60 }),
-  mkCampaign({ id: 9002, name: "KYC Reminder", userId: 5003, userName: "loanhub", status: "running", kind: "live", type: "DTMF", callsDialed: 2600, pending: 900, dtmf: 610 }),
+  mkCampaign({ id: 9001, name: "Diwali Push 01", userId: 5001, userName: "acme_calls", status: "running", kind: "live", type: "OBD", callsDialed: 4200, pending: 1800, channels: 60 }),
+  mkCampaign({ id: 9002, name: "KYC Reminder", userId: 5003, userName: "loanhub", status: "running", kind: "live", type: "DTMF", mode: "API", callsDialed: 2600, pending: 900, dtmf: 610 }),
   mkCampaign({ id: 9003, name: "Ward 12 Poll", userId: 5002, userName: "civic_poll", status: "paused", kind: "live", type: "DTMF", callsDialed: 1500, pending: 500, pauseTime: "09:40" }),
-  mkCampaign({ id: 9004, name: "Clinic Slots", userId: 5005, userName: "healthline", status: "running", kind: "live", type: "Call Patch", callsDialed: 800, pending: 300 }),
-  mkCampaign({ id: 9005, name: "Fee Reminder", userId: 5006, userName: "eduwave", status: "complete", kind: "live", type: "Simple IVR", callsDialed: 1200, pending: 0 }),
+  mkCampaign({ id: 9004, name: "Clinic Slots", userId: 5005, userName: "healthline", status: "running", kind: "live", type: "Call Patch", mode: "API", callsDialed: 800, pending: 300 }),
+  mkCampaign({ id: 9005, name: "Fee Reminder", userId: 5006, userName: "eduwave", status: "complete", kind: "live", type: "OBD", callsDialed: 1200, pending: 0 }),
 
-  mkCampaign({ id: 9101, name: "Loan Pre-approval", userId: 5003, userName: "loanhub", status: "running", kind: "prompt", type: "Simple IVR", callsDialed: 3100, pending: 700, promptId: 3301 }),
-  mkCampaign({ id: 9102, name: "Offer Broadcast", userId: 5001, userName: "acme_calls", status: "complete", kind: "prompt", type: "Simple IVR", callsDialed: 5400, pending: 0, promptId: 3302 }),
-  mkCampaign({ id: 9103, name: "Health Tips", userId: 5005, userName: "healthline", status: "scheduled", kind: "prompt", type: "Simple IVR", callsDialed: 0, promptId: 3303, startTime: "2026-08-04 10:00" }),
+  mkCampaign({ id: 9101, name: "Loan Pre-approval", userId: 5003, userName: "loanhub", status: "running", kind: "prompt", type: "OBD", mode: "API", callsDialed: 3100, pending: 700, promptId: 3301 }),
+  mkCampaign({ id: 9102, name: "Offer Broadcast", userId: 5001, userName: "acme_calls", status: "complete", kind: "prompt", type: "OBD", callsDialed: 5400, pending: 0, promptId: 3302 }),
+  mkCampaign({ id: 9103, name: "Health Tips", userId: 5005, userName: "healthline", status: "scheduled", kind: "prompt", type: "OBD", callsDialed: 0, promptId: 3303, startTime: "2026-08-04 10:00" }),
 
-  mkCampaign({ id: 9201, name: "Festival Offer", userId: 5001, userName: "acme_calls", status: "complete", kind: "history", type: "Simple IVR", callsDialed: 8200, startTime: "2026-07-28 11:00", endTime: "2026-07-28 12:20" }),
-  mkCampaign({ id: 9202, name: "Repayment Alert", userId: 5003, userName: "loanhub", status: "complete", kind: "history", type: "DTMF", callsDialed: 4600, startTime: "2026-07-25 15:00", endTime: "2026-07-25 15:44" }),
+  mkCampaign({ id: 9201, name: "Festival Offer", userId: 5001, userName: "acme_calls", status: "complete", kind: "history", type: "OBD", callsDialed: 8200, startTime: "2026-07-28 11:00", endTime: "2026-07-28 12:20" }),
+  mkCampaign({ id: 9202, name: "Repayment Alert", userId: 5003, userName: "loanhub", status: "complete", kind: "history", type: "DTMF", mode: "API", callsDialed: 4600, startTime: "2026-07-25 15:00", endTime: "2026-07-25 15:44" }),
   mkCampaign({ id: 9203, name: "Survey Q2", userId: 5002, userName: "civic_poll", status: "failed", kind: "history", type: "DTMF", callsDialed: 300, startTime: "2026-07-20 09:00", endTime: "2026-07-20 09:05", connected: 12 }),
-  mkCampaign({ id: 9204, name: "Admissions Open", userId: 5006, userName: "eduwave", status: "complete", kind: "history", type: "Custom IVR", callsDialed: 2100, startTime: "2026-07-15 10:30", endTime: "2026-07-15 11:10" }),
+  mkCampaign({ id: 9204, name: "Admissions Open", userId: 5006, userName: "eduwave", status: "complete", kind: "history", type: "Repeat", callsDialed: 2100, startTime: "2026-07-15 10:30", endTime: "2026-07-15 11:10" }),
 ];
 
 export const ledger: LedgerEntry[] = [

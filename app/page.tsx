@@ -166,10 +166,11 @@ export default function Dashboard() {
             <h3 style={{ fontSize: 16 }}>Answered vs Non-answered</h3>
             <select className="input" style={{ width: 130, minHeight: 32, fontSize: 12.5 }} value={type} onChange={(e) => setType(e.target.value as "all" | CampaignType)}>
               <option value="all">All types</option>
-              <option value="Simple IVR">Simple IVR</option>
+              <option value="OBD">OBD</option>
               <option value="DTMF">DTMF</option>
               <option value="Call Patch">Call Patch</option>
-              <option value="Custom IVR">Custom IVR</option>
+              <option value="Repeat">Repeat</option>
+              <option value="HangUp">HangUp</option>
             </select>
           </div>
           <div style={{ color: "var(--color-neutral-600)", fontSize: 12, marginBottom: 14 }}>Across {analysis.length} campaigns</div>
