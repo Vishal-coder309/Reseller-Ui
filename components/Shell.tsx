@@ -59,6 +59,9 @@ export default function Shell({ children }: { children: React.ReactNode }) {
             <div style={{ fontFamily: "var(--font-heading)", fontWeight: 600, fontSize: 17, letterSpacing: "-.01em", color: "#f3f2f2" }}>Voice Console</div>
             <div style={{ fontSize: 10.5, letterSpacing: ".12em", textTransform: "uppercase", color: "rgba(255,255,255,0.72)" }}>Reseller</div>
           </div>
+          <button className="nav-close" aria-label="Close menu" onClick={() => setMobileNav(false)}>
+            <i className="ph-duotone ph-x" style={{ fontSize: 17 }} />
+          </button>
         </div>
 
         <nav style={{ flex: 1, overflowY: "auto", padding: "10px 12px 12px", scrollbarWidth: "none" }}>

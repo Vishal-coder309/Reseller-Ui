@@ -109,7 +109,7 @@ export default function Dashboard() {
     <>
       <PageHead kicker="Overview" title={`Welcome back, ${RESELLER.name.split(" ")[0]}`} />
 
-      <div className="kpi-grid" data-cols style={{ gridTemplateColumns: "repeat(5,1fr)", gap: 12 }}>
+      <div className="kpi-grid" data-kpis style={{ gridTemplateColumns: "repeat(5,1fr)", gap: 12 }}>
         <KpiCard tone="accent" icon="ph-wallet" label="Wallet Balance" value={`₹${fmt(voiceBalance)}`} sub={`₹${fmt(issued)} issued to users`} />
         <KpiCard tone="green" icon="ph-users-three" label="Active Users" value={`${activeUsers} / ${users.length}`} sub={lowBalance ? `${lowBalance} low on balance` : "all funded"} />
         <KpiCard tone="amber" icon="ph-broadcast" label="Live Campaigns" value={running} sub={`${live.length} scheduled today`} />

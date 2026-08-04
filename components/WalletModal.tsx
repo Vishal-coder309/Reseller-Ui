@@ -100,7 +100,7 @@ export default function WalletModal({ onClose }: { onClose: () => void }) {
               <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "11px 14px", background: "var(--color-accent-700)", color: "var(--color-bg)", fontSize: 13, fontWeight: 600, fontFamily: "var(--font-heading)" }}>
                 <i className="ph-duotone ph-caret-left" style={{ cursor: "pointer" }} />{monLong} {year}<i className="ph-duotone ph-caret-right" style={{ cursor: "pointer" }} />
               </div>
-              <div style={{ display: "grid", gridTemplateColumns: "repeat(7,1fr)", gap: 2, padding: 10 }}>
+              <div data-keep-cols style={{ display: "grid", gridTemplateColumns: "repeat(7,1fr)", gap: 2, padding: 10 }}>
                 {["S", "M", "T", "W", "T", "F", "S"].map((d, i) => (<div key={"h" + i} style={{ textAlign: "center", fontSize: 10.5, color: "var(--color-neutral-500)", padding: "2px 0" }}>{d}</div>))}
                 {calDays.map((d, i) => {
                   if (!d) return <div key={"d" + i} />;
@@ -128,13 +128,13 @@ export default function WalletModal({ onClose }: { onClose: () => void }) {
               <h3 style={{ fontSize: 15, margin: 0 }}>Balance by service</h3>
               <button className="btn btn-icon" title="Download in Excel" aria-label="Download summary" onClick={() => downloadCsv("wallet-summary.csv", [["Services", "Product", "Credit", "Transaction Type"], ...summary.map((r) => [r.service, r.product, r.credit, r.type])])} style={{ width: 34, height: 34, borderRadius: "50%", background: "var(--color-accent-100)", color: "var(--color-accent-700)", flex: "none" }}><i className="ph-duotone ph-download-simple" style={{ fontSize: 17 }} /></button>
             </div>
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", alignItems: "center", background: "var(--color-neutral-200)", borderRadius: 14, padding: "12px 24px" }}>
+            <div data-keep-cols style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", alignItems: "center", background: "var(--color-neutral-200)", borderRadius: 14, padding: "12px 24px" }}>
               {[["Services", "ph-users-three"], ["Product", "ph-identification-badge"], ["Credit", "ph-wallet"], ["Transaction Type", "ph-arrows-down-up"]].map(([label, icon]) => (
                 <div key={label} style={{ textAlign: "center" }}><i className={"ph-duotone " + icon} style={{ fontSize: 22, display: "block", margin: "0 auto 5px", color: "var(--color-accent-700)" }} /><div style={{ fontWeight: 600, fontFamily: "var(--font-heading)", fontSize: 13.5 }}>{label}</div></div>
               ))}
             </div>
             {summary.map((r, i) => (
-              <div key={i} style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", alignItems: "center", textAlign: "center", padding: "13px 24px", marginTop: 4, borderRadius: 10, fontSize: 14, background: i % 2 ? undefined : "var(--color-bg)" }}>
+              <div key={i} data-keep-cols style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", alignItems: "center", textAlign: "center", padding: "13px 24px", marginTop: 4, borderRadius: 10, fontSize: 14, background: i % 2 ? undefined : "var(--color-bg)" }}>
                 <div style={{ fontWeight: 600, fontFamily: "var(--font-heading)" }}>{r.service}</div>
                 <div className="text-muted">{r.product}</div>
                 <div className="tabnum">{r.credit}</div>
@@ -149,11 +149,11 @@ export default function WalletModal({ onClose }: { onClose: () => void }) {
               <h3 style={{ fontSize: 15, margin: 0 }}>Transaction history</h3>
               <button className="btn btn-icon" title="Download in Excel" aria-label="Download history" onClick={() => downloadCsv("wallet-history.csv", [["Date", "Service", "Product", "Credit", "Reason"], ...history.map((r) => [r.date, r.service, r.product, fmtAmt(r.amt), r.reason])])} style={{ width: 34, height: 34, borderRadius: "50%", background: "var(--color-accent-100)", color: "var(--color-accent-700)", flex: "none" }}><i className="ph-duotone ph-download-simple" style={{ fontSize: 17 }} /></button>
             </div>
-            <div style={{ display: "grid", gridTemplateColumns: "0.9fr 0.8fr 1.1fr 0.9fr 1.6fr", alignItems: "center", textAlign: "center", background: "#091f44", borderRadius: 14, padding: "13px 24px", color: "#fff", fontWeight: 600, fontFamily: "var(--font-heading)", fontSize: 13.5 }}>
+            <div data-keep-cols style={{ display: "grid", gridTemplateColumns: "0.9fr 0.8fr 1.1fr 0.9fr 1.6fr", alignItems: "center", textAlign: "center", background: "#091f44", borderRadius: 14, padding: "13px 24px", color: "#fff", fontWeight: 600, fontFamily: "var(--font-heading)", fontSize: 13.5 }}>
               <div>Date</div><div>Service</div><div>Product</div><div>Credit</div><div>Reason</div>
             </div>
             {history.map((r, i) => (
-              <div key={i} style={{ display: "grid", gridTemplateColumns: "0.9fr 0.8fr 1.1fr 0.9fr 1.6fr", alignItems: "center", textAlign: "center", padding: "13px 24px", marginTop: 4, borderRadius: 10, fontSize: 14, background: i % 2 ? undefined : "var(--color-bg)" }}>
+              <div key={i} data-keep-cols style={{ display: "grid", gridTemplateColumns: "0.9fr 0.8fr 1.1fr 0.9fr 1.6fr", alignItems: "center", textAlign: "center", padding: "13px 24px", marginTop: 4, borderRadius: 10, fontSize: 14, background: i % 2 ? undefined : "var(--color-bg)" }}>
                 <div className="text-muted tabnum">{r.date}</div>
                 <div style={{ fontWeight: 600, fontFamily: "var(--font-heading)" }}>{r.service}</div>
                 <div className="text-muted">{r.product}</div>

@@ -50,7 +50,7 @@ export function CampaignSummary({ kind, userWise }: { kind: "live" | "prompt"; u
 
   return (
     <>
-      <div className="kpi-grid" data-cols style={{ gridTemplateColumns: "repeat(6,1fr)" }}>
+      <div className="kpi-grid" data-kpis style={{ gridTemplateColumns: "repeat(6,1fr)" }}>
         {chips.map((c, i) => {
           const t = CHIP_TONES[i % CHIP_TONES.length];
           return (
