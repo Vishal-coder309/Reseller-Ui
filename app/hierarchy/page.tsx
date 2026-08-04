@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useCallback, useLayoutEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { useStore } from "@/lib/store";
 import { RESELLER, User } from "@/lib/mock-data";
@@ -46,20 +46,43 @@ export default function Hierarchy() {
   const matches = (u: User) => !!q && (u.username.toLowerCase().includes(q) || u.name.toLowerCase().includes(q) || u.company.toLowerCase().includes(q));
   const hits = q ? users.filter(matches).length : 0;
 
-  const renderChildren = (username: string) => {
-    const kids = childrenOf(username);
-    if (kids.length === 0) return null;
-    return (
-      <ul>
-        {kids.map((u) => (
-          <li key={u.id}>
-            <NodeCard u={u} hit={matches(u)} dim={!!q && !matches(u)} />
-            {renderChildren(u.username)}
-          </li>
-        ))}
-      </ul>
-    );
+  // breadth-first levels; children stay grouped in parent order so edges stay near-vertical
+  const levels: User[][] = [];
+  let cur = childrenOf(RESELLER.username);
+  while (cur.length) {
+    levels.push(cur);
+    cur = cur.flatMap((u) => childrenOf(u.username));
+  }
+
+  // edges are measured from the rendered DOM, so rows can be evenly spaced and
+  // the curves always meet each card dead-centre no matter how many nodes there are
+  const wrapRef = useRef<HTMLDivElement | null>(null);
+  const nodeEls = useRef<Map<string, HTMLElement>>(new Map());
+  const [edges, setEdges] = useState<{ id: number; x1: number; y1: number; x2: number; y2: number }[]>([]);
+  const [size, setSize] = useState({ w: 0, h: 0 });
+  const setNodeRef = (name: string) => (el: HTMLDivElement | null) => {
+    if (el) nodeEls.current.set(name, el);
+    else nodeEls.current.delete(name);
   };
+
+  const measure = useCallback(() => {
+    const c = wrapRef.current;
+    if (!c) return;
+    const cr = c.getBoundingClientRect();
+    setEdges(users.flatMap((u) => {
+      const p = nodeEls.current.get(u.parent), k = nodeEls.current.get(u.username);
+      if (!p || !k) return [];
+      const pr = p.getBoundingClientRect(), kr = k.getBoundingClientRect();
+      return [{ id: u.id, x1: pr.left + pr.width / 2 - cr.left, y1: pr.bottom - cr.top, x2: kr.left + kr.width / 2 - cr.left, y2: kr.top - cr.top }];
+    }));
+    setSize({ w: c.offsetWidth, h: c.offsetHeight });
+  }, [users]);
+
+  useLayoutEffect(() => {
+    measure();
+    window.addEventListener("resize", measure);
+    return () => window.removeEventListener("resize", measure);
+  }, [measure]);
 
   return (
     <>
@@ -78,21 +101,38 @@ export default function Hierarchy() {
             <span className="text-muted">Lines show who manages whom</span>
           </div>
         </div>
+
         <div className="org-canvas">
-        <ul className="org">
-          <li>
+          <div ref={wrapRef} style={{ position: "relative", padding: "34px 20px 44px", minWidth: "max-content", margin: "0 auto" }}>
+            <svg width={size.w} height={size.h} style={{ position: "absolute", inset: 0, pointerEvents: "none" }} aria-hidden="true">
+              {edges.map((e) => {
+                const my = (e.y1 + e.y2) / 2;
+                return <path key={e.id} d={`M ${e.x1} ${e.y1} C ${e.x1} ${my}, ${e.x2} ${my}, ${e.x2} ${e.y2}`} fill="none" stroke="#b3c6cf" strokeWidth={2} strokeLinecap="round" />;
+              })}
+            </svg>
+
             {/* root: you */}
-            <div className="org-node" style={{ background: "#091f44", border: "none", width: 172, padding: "14px 12px 12px", boxShadow: "0 12px 28px rgba(9,31,68,0.32)", ...(q ? { opacity: 0.55 } : undefined) }}>
-              <span style={{ width: 44, height: 44, borderRadius: "50%", background: "linear-gradient(135deg,#00b8ff,#4fd0ff)", color: "#00344b", display: "grid", placeItems: "center", fontFamily: "var(--font-heading)", fontWeight: 700, fontSize: 14 }}>
-                {RESELLER.name.split(" ").map((w) => w[0]).join("").slice(0, 2).toUpperCase()}
-              </span>
-              <span style={{ fontWeight: 600, fontFamily: "var(--font-heading)", fontSize: 14, color: "#fff", marginTop: 4 }}>You</span>
-              <span style={{ fontSize: 11, color: "rgba(255,255,255,.7)" }}>{RESELLER.username}</span>
-              <span style={{ fontSize: 11.5, color: "rgba(255,255,255,.85)", marginTop: 5 }}>{totalUsers} users · {totalResellers} resellers</span>
+            <div style={{ display: "flex", justifyContent: "center", position: "relative" }}>
+              <div ref={setNodeRef(RESELLER.username)} className="org-node" style={{ background: "#091f44", border: "none", width: 172, padding: "14px 12px 12px", boxShadow: "0 12px 28px rgba(9,31,68,0.32)", ...(q ? { opacity: 0.55 } : undefined) }}>
+                <span style={{ width: 44, height: 44, borderRadius: "50%", background: "linear-gradient(135deg,#00b8ff,#4fd0ff)", color: "#00344b", display: "grid", placeItems: "center", fontFamily: "var(--font-heading)", fontWeight: 700, fontSize: 14 }}>
+                  {RESELLER.name.split(" ").map((w) => w[0]).join("").slice(0, 2).toUpperCase()}
+                </span>
+                <span style={{ fontWeight: 600, fontFamily: "var(--font-heading)", fontSize: 14, color: "#fff", marginTop: 4 }}>You</span>
+                <span style={{ fontSize: 11, color: "rgba(255,255,255,.7)" }}>{RESELLER.username}</span>
+                <span style={{ fontSize: 11.5, color: "rgba(255,255,255,.85)", marginTop: 5 }}>{totalUsers} users · {totalResellers} resellers</span>
+              </div>
             </div>
-            {renderChildren(RESELLER.username)}
-          </li>
-        </ul>
+
+            {levels.map((lvl, i) => (
+              <div key={i} style={{ display: "flex", justifyContent: "center", gap: 26, marginTop: 56, position: "relative" }}>
+                {lvl.map((u) => (
+                  <div key={u.id} ref={setNodeRef(u.username)}>
+                    <NodeCard u={u} hit={matches(u)} dim={!!q && !matches(u)} />
+                  </div>
+                ))}
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     </>
