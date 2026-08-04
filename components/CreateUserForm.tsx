@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useStore } from "@/lib/store";
-import { MODULE_OPTIONS } from "@/lib/mock-data";
+import { MODULE_OPTIONS, RESELLER } from "@/lib/mock-data";
 
 interface ModuleRow { module: string; action: string; }
 
@@ -15,7 +15,7 @@ export default function CreateUserForm({ onToast, onCreated }: { onToast: (m: st
     company: "", address: "", pincode: "", customerType: "user" as "reseller" | "user",
     voicePlanId: store.voicePlans.find((p) => p.enabled)?.id ?? 0,
     userId: "", expiry: "", planType: "Prepaid" as "Prepaid" | "Postpaid",
-    accountType: "Promotional",
+    accountType: "Promotional", parent: RESELLER.username,
   });
   const set = (k: keyof typeof f, v: string | number) => setF((s) => ({ ...s, [k]: v }));
 
@@ -35,7 +35,7 @@ export default function CreateUserForm({ onToast, onCreated }: { onToast: (m: st
       username: f.username, name: f.name, email: f.email, mobile: f.mobile, company: f.company,
       address: f.address, pincode: f.pincode, type: f.customerType, voicePlanId: Number(f.voicePlanId),
       id: f.userId ? Number(f.userId) : undefined, expiry: f.expiry || undefined, planType: f.planType,
-      accountType: f.accountType, module: modules.map((m) => m.module),
+      accountType: f.accountType, module: modules.map((m) => m.module), parent: f.parent,
     });
     onCreated(f.username);
   };
@@ -59,6 +59,13 @@ export default function CreateUserForm({ onToast, onCreated }: { onToast: (m: st
           <select className="input" value={f.customerType} onChange={(e) => set("customerType", e.target.value)}>
             <option value="user">User</option><option value="reseller">Reseller</option>
           </select>
+        </div>
+        <div className="field"><label>Parent Account</label>
+          <select className="input" value={f.parent} onChange={(e) => set("parent", e.target.value)}>
+            <option value={RESELLER.username}>{RESELLER.username} (you)</option>
+            {store.users.filter((u) => u.type === "reseller").map((u) => <option key={u.id} value={u.username}>{u.username} · {u.company}</option>)}
+          </select>
+          <div className="help">The account this user sits under in the hierarchy.</div>
         </div>
         <div className="field"><label>Voice Plan</label>
           <select className="input" value={f.voicePlanId} onChange={(e) => set("voicePlanId", Number(e.target.value))}>

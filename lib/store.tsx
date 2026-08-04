@@ -123,7 +123,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
         accountType: u.accountType ?? "Promotional", type: u.type ?? "user",
         voiceBalance: u.voiceBalance ?? 0, voicePlanId: u.voicePlanId ?? seedVoicePlans[0].id,
         ttsBalance: u.ttsBalance ?? 0, ttsPlanId: u.ttsPlanId ?? seedTtsPlans[0].id,
-        parent: "DEMO_OPERATOR", expiry: u.expiry ?? "2027-01-01",
+        parent: u.parent ?? "DEMO_OPERATOR", expiry: u.expiry ?? "2027-01-01",
         createdAt: new Date().toISOString().slice(0, 10), planType: u.planType ?? "Prepaid",
         status: "Active", clis: u.clis ?? [],
       };
