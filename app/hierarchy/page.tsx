@@ -20,7 +20,7 @@ function NodeCard({ u, hit, dim }: { u: User; hit: boolean; dim: boolean }) {
       className="org-node"
       style={{
         borderTop: `3px solid ${reseller ? "#7a5cff" : "#00b8ff"}`,
-        ...(hit ? { boxShadow: "0 0 0 3px rgba(0,184,255,0.45), var(--shadow-md)", borderColor: "var(--color-accent)" } : undefined),
+        ...(hit ? { boxShadow: "0 0 0 3px rgba(0,184,255,0.45), var(--shadow-md)" } : undefined),
         ...(dim ? { opacity: 0.3, filter: "grayscale(0.4)" } : undefined),
       }}
     >
