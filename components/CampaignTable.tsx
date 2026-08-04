@@ -1,12 +1,12 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { Fragment, useMemo, useState } from "react";
 import { campaigns, Campaign, CampaignStatus } from "@/lib/mock-data";
 import { StatusPill, EmptyRow, Toast } from "@/components/ui";
 
-// Shared live/prompt summary: stat chips + filterable table.
-// `kind` selects the seed subset; `showPrompt` adds the Prompt ID column + date filters.
-export function CampaignSummary({ kind, showPrompt }: { kind: "live" | "prompt"; showPrompt?: boolean }) {
+// Shared campaign summary: stat chips + filterable table.
+// `kind` selects the seed subset; `userWise` groups rows under per-user header rows + date filters.
+export function CampaignSummary({ kind, userWise }: { kind: "live" | "prompt"; userWise?: boolean }) {
   const [status, setStatus] = useState<"all" | CampaignStatus>("all");
   const [username, setUsername] = useState("all");
   const [selected, setSelected] = useState<Set<number>>(new Set());
@@ -28,10 +28,10 @@ export function CampaignSummary({ kind, showPrompt }: { kind: "live" | "prompt";
     setToast(`"${c.name}" ${s === "paused" ? "paused" : s === "running" ? "resumed" : "stopped"}.`);
   };
 
-  const rows = useMemo(
-    () => base.filter((c) => (status === "all" || c.status === status) && (username === "all" || c.userName === username)),
-    [base, status, username]
-  );
+  const rows = useMemo(() => {
+    const f = base.filter((c) => (status === "all" || c.status === status) && (username === "all" || c.userName === username));
+    return userWise ? [...f].sort((a, b) => a.userName.localeCompare(b.userName)) : f;
+  }, [base, status, username, userWise]);
 
   const usernames = Array.from(new Set(base.map((c) => c.userName)));
   const sum = (f: (c: Campaign) => number) => rows.reduce((s, c) => s + f(c), 0);
@@ -71,10 +71,9 @@ export function CampaignSummary({ kind, showPrompt }: { kind: "live" | "prompt";
               <option value="all">All</option>{usernames.map((u) => <option key={u}>{u}</option>)}
             </select>
           </div>
-          {showPrompt && (<>
+          {userWise && (<>
             <div className="field"><label>From</label><input className="input" type="date" style={{ width: 160 }} /></div>
             <div className="field"><label>To</label><input className="input" type="date" style={{ width: 160 }} /></div>
-            <div className="field"><label>Prompt Id / Name</label><input className="input" placeholder="Search prompt…" style={{ width: 170 }} /></div>
           </>)}
           <div style={{ marginLeft: "auto", display: "flex", gap: 10 }}>
             <button className="btn btn-secondary"><i className="ph-duotone ph-arrows-clockwise" style={{ fontSize: 15 }} /> Refresh</button>
@@ -86,14 +85,20 @@ export function CampaignSummary({ kind, showPrompt }: { kind: "live" | "prompt";
             <thead><tr>
               <th><input type="checkbox" checked={allChecked} onChange={() => setSelected(allChecked ? new Set() : new Set(rows.map((r) => r.id)))} /></th>
               <th>Campaign Id</th><th>Name</th><th>User</th><th>Parent</th><th>Status</th><th className="num">Channels</th><th>Type</th>
-              {showPrompt && <th>Prompt ID</th>}
               <th>Start</th><th>End</th><th className="num">Numbers</th><th className="num">Dialed</th><th className="num">Pending</th><th className="num">Connected</th>
               <th className="num">Pulses</th><th className="num">DnD</th><th className="num">DTMF</th><th className="num">SMS</th><th className="num">Retry</th><th className="num">Vars</th><th>Pause</th><th>Action</th>
             </tr></thead>
             <tbody>
-              {rows.length === 0 ? <EmptyRow colSpan={showPrompt ? 24 : 23} icon="ph-broadcast" message="No campaigns match this filter." /> :
-                rows.map((c) => (
-                  <tr key={c.id}>
+              {rows.length === 0 ? <EmptyRow colSpan={22} icon="ph-broadcast" message="No campaigns match this filter." /> :
+                rows.map((c, i) => (
+                  <Fragment key={c.id}>
+                    {userWise && (i === 0 || rows[i - 1].userName !== c.userName) && (
+                      <tr><td colSpan={22} style={{ background: "var(--color-bg)", fontWeight: 600, fontFamily: "var(--font-heading)", fontSize: 13 }}>
+                        <i className="ph-duotone ph-user-circle" style={{ fontSize: 16, verticalAlign: "-3px", color: "var(--color-accent-700)", marginRight: 7 }} />
+                        {c.userName} <span className="text-muted" style={{ fontWeight: 400 }}>· {rows.filter((r) => r.userName === c.userName).length} campaign{rows.filter((r) => r.userName === c.userName).length > 1 ? "s" : ""}</span>
+                      </td></tr>
+                    )}
+                  <tr>
                     <td><input type="checkbox" checked={selected.has(c.id)} onChange={() => toggle(c.id)} /></td>
                     <td className="tabnum">{c.id}</td>
                     <td style={{ fontWeight: 600 }}><a href={`/campaigns/${c.id}`}>{c.name}</a></td>
@@ -102,7 +107,6 @@ export function CampaignSummary({ kind, showPrompt }: { kind: "live" | "prompt";
                     <td><StatusPill status={c.status} /></td>
                     <td className="num">{c.channels}</td>
                     <td className="text-muted">{c.type}</td>
-                    {showPrompt && <td className="tabnum">{c.promptId ?? "—"}</td>}
                     <td className="tabnum">{c.startTime}</td>
                     <td className="tabnum">{c.endTime}</td>
                     <td className="num">{c.totalNumbers.toLocaleString("en-IN")}</td>
@@ -130,6 +134,7 @@ export function CampaignSummary({ kind, showPrompt }: { kind: "live" | "prompt";
                       </>)}
                     </div></td>
                   </tr>
+                  </Fragment>
                 ))}
             </tbody>
           </table>
