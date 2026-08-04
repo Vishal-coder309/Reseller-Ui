@@ -255,6 +255,10 @@ details.adv[open] > summary::before { transform: rotate(90deg); }
 .info-tip-row { display: flex; align-items: flex-start; gap: 9px; }
 .info-tip-row + .info-tip-row { margin-top: 9px; }
 
+/* hierarchy tree rows */
+.tree-row { display: flex; align-items: center; gap: 10px; padding: 8px 18px 8px 16px; }
+.tree-row:hover { background: color-mix(in srgb, var(--color-accent) 6%, transparent); }
+
 /* ===== popover ===== */
 .pop-wrap { position: relative; display: inline-block; }
 .popover {
