@@ -16,14 +16,22 @@ function downloadCsv(filename: string, rows: (string | number)[][]) {
   setTimeout(() => URL.revokeObjectURL(a.href), 0);
 }
 
-// Ledger entries seen from the reseller's wallet: money leaving us is a debit.
+// Credits received from the superadmin — the store ledger only records user-facing moves.
+const SUPERADMIN_TOPUPS = [
+  { date: "2026-08-01 11:20", service: "Voice", product: RESELLER.planName, amt: 2000, reason: "Top-up from SUPERADMIN" },
+  { date: "2026-07-24 10:05", service: "TTS", product: "TTS Credits", amt: 1000, reason: "Top-up from SUPERADMIN" },
+];
+
+// Ledger entries seen from the reseller's wallet: recharges to users are debits,
+// removals are credits back. Users' own campaign spend never touches this wallet.
 function ledgerRow(e: LedgerEntry) {
-  const tts = e.ttsCredits > 0;
-  const out = e.fromUser === RESELLER.username;
+  if (e.action === "campaign_deduction") return null;
+  const tts = e.action === "tts_addition" || e.ttsCredits > 0;
+  const out = e.action !== "deduction";
   return {
     date: e.date,
     service: tts ? "TTS" : "Voice",
-    product: e.campaign !== "-" ? e.campaign : tts ? "TTS Credits" : RESELLER.planName,
+    product: tts ? "TTS Credits" : RESELLER.planName,
     amt: out ? -e.amount : e.amount,
     reason: out ? `Recharge to ${e.actionOn}` : `Credit back from ${e.actionOn}`,
   };
@@ -57,7 +65,8 @@ export default function WalletModal({ onClose }: { onClose: () => void }) {
     { service: "Voice", product: RESELLER.planName, credit: fmt(voiceBalance), type: "Debit" },
     { service: "TTS", product: "TTS Credits", credit: fmt(ttsBalance), type: "Debit" },
   ];
-  const history = ledger.map(ledgerRow);
+  const history = [...ledger.map(ledgerRow).filter((r) => r !== null), ...SUPERADMIN_TOPUPS]
+    .sort((a, b) => b.date.localeCompare(a.date));
   const used30 = fmt(history.reduce((n, r) => n + (r.amt < 0 ? -r.amt : 0), 0));
 
   const stop = (e: React.MouseEvent) => e.stopPropagation();
@@ -68,7 +77,7 @@ export default function WalletModal({ onClose }: { onClose: () => void }) {
         <div className="modal-header" style={{ position: "sticky", top: 0, zIndex: 2 }}>
           <div>
             <h3 className="modal-title">Wallet</h3>
-            <p className="modal-sub">Your balances and every recharge in and out of your user accounts.</p>
+            <p className="modal-sub">Top-ups come in from your superadmin; recharges go out to your users.</p>
           </div>
           <button className="modal-close" aria-label="Close" onClick={onClose}><i className="ph-duotone ph-x" /></button>
         </div>
