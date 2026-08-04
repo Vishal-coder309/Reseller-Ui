@@ -120,7 +120,7 @@ export function CampaignSummary({ kind, userWise }: { kind: "live" | "prompt"; u
                     <td className="num">{c.retryCount}</td>
                     <td className="num">{c.variableCount}</td>
                     <td className="text-muted">{c.pauseTime}</td>
-                    <td><div style={{ position: "relative" }}>
+                    <td>{c.status !== "running" && c.status !== "paused" && c.status !== "scheduled" ? <span className="text-muted">—</span> : <div style={{ position: "relative" }}>
                       <button className="btn btn-secondary" onClick={(e) => toggleMenu(c.id, e)}>Take Action <i className="ph-duotone ph-caret-down" style={{ fontSize: 13 }} /></button>
                       {menu && menu.id === c.id && (<>
                         <div onClick={() => setMenu(null)} style={{ position: "fixed", inset: 0, zIndex: 40 }} />
@@ -128,10 +128,9 @@ export function CampaignSummary({ kind, userWise }: { kind: "live" | "prompt"; u
                           {c.status === "running" && (<button className="btn btn-ghost" onClick={() => setCampaignStatus(c, "paused")} style={{ width: "100%", margin: 0, justifyContent: "flex-start", borderRadius: 0 }}><i className="ph-duotone ph-pause" style={{ fontSize: 16 }} /> Pause</button>)}
                           {c.status === "paused" && (<button className="btn btn-ghost" onClick={() => setCampaignStatus(c, "running")} style={{ width: "100%", margin: 0, justifyContent: "flex-start", borderRadius: 0 }}><i className="ph-duotone ph-play" style={{ fontSize: 16 }} /> Resume</button>)}
                           {(c.status === "running" || c.status === "paused" || c.status === "scheduled") && (<button className="btn btn-ghost" onClick={() => { if (window.confirm(`Stop "${c.name}"? This ends the campaign and cannot be undone.`)) setCampaignStatus(c, "complete"); }} style={{ width: "100%", margin: 0, justifyContent: "flex-start", borderRadius: 0, color: "var(--color-accent-2-700)" }}><i className="ph-duotone ph-stop" style={{ fontSize: 16 }} /> Stop</button>)}
-                          <a href={`/campaigns/${c.id}`} className="btn btn-ghost" style={{ width: "100%", margin: 0, justifyContent: "flex-start", borderRadius: 0 }}><i className="ph-duotone ph-eye" style={{ fontSize: 16 }} /> View Details</a>
                         </div>
                       </>)}
-                    </div></td>
+                    </div>}</td>
                   </tr>
                   </Fragment>
                 ))}
