@@ -47,8 +47,25 @@ function Bar({ pct, color }: { pct: number; color: string }) {
 }
 
 export default function Dashboard() {
-  const { users, voiceBalance, ledger } = useStore();
+  const { users, voiceBalance, ledger, voicePlans } = useStore();
   const [type, setType] = useState<"all" | CampaignType>("all");
+
+  // margin = user plan price − reseller pulse cost, same math as the Reseller Summary report
+  const marginRows = useMemo(() => campaigns.map((c) => {
+    const u = users.find((x) => x.id === c.userId);
+    const userPrice = (u && voicePlans.find((p) => p.id === u.voicePlanId)?.pulsePrice) ?? c.pulsePrice;
+    return {
+      c,
+      billed: (c.totalPulses * userPrice) / 100,
+      cost: (c.totalPulses * RESELLER.resellerPulsePrice) / 100,
+      margin: (c.totalPulses * (userPrice - RESELLER.resellerPulsePrice)) / 100,
+    };
+  }), [users, voicePlans]);
+  const totBilled = marginRows.reduce((s, r) => s + r.billed, 0);
+  const totCost = marginRows.reduce((s, r) => s + r.cost, 0);
+  const totMargin = totBilled - totCost;
+  const topMargin = [...marginRows].sort((a, b) => b.margin - a.margin).slice(0, 5);
+  const maxMargin = topMargin[0]?.margin || 1;
 
   const live = campaigns.filter((c) => c.kind === "live");
   const running = live.filter((c) => c.status === "running").length;
@@ -163,6 +180,45 @@ export default function Dashboard() {
           </div>
           <div style={{ marginTop: 14, paddingTop: 14, borderTop: "1px solid var(--color-divider)", fontSize: 13, display: "flex", justifyContent: "space-between" }}>
             <span>Total Expenditure</span><b className="tabnum">₹{totExp.toFixed(2)}</b>
+          </div>
+        </div>
+      </div>
+
+      {/* revenue & margin */}
+      <div className="card" style={{ marginBottom: 20 }}>
+        <div className="card-head">
+          <div><h3>Revenue &amp; Margin</h3><div className="sub">What users are billed vs your pulse cost, across {marginRows.length} campaigns</div></div>
+          <a className="btn btn-ghost" href="/reports">Full report →</a>
+        </div>
+        <div data-split style={{ display: "grid", gridTemplateColumns: "1fr 1.4fr", gap: 16, padding: "16px 19px 18px", alignItems: "start" }}>
+          <div style={{ display: "grid", gap: 10 }}>
+            {[
+              { label: "Billed to Users", value: totBilled, tone: TONES.accent, icon: "ph-invoice" },
+              { label: "Your Pulse Cost", value: totCost, tone: TONES.amber, icon: "ph-coins" },
+              { label: "Your Margin", value: totMargin, tone: TONES.green, icon: "ph-trend-up" },
+            ].map((t) => (
+              <div key={t.label} style={{ display: "flex", alignItems: "center", gap: 12, background: "var(--color-bg)", border: "1px solid var(--color-divider)", borderLeft: `3px solid ${t.tone.hex}`, borderRadius: "var(--radius-md)", padding: "11px 14px" }}>
+                <span style={{ width: 34, height: 34, flex: "none", borderRadius: 9, display: "grid", placeItems: "center", background: t.tone.chip, color: t.tone.fg }}>
+                  <i className={`ph-duotone ${t.icon}`} style={{ fontSize: 18 }} />
+                </span>
+                <span style={{ flex: 1, fontSize: 12.5, color: "var(--color-neutral-600)" }}>{t.label}</span>
+                <b className="tabnum" style={{ fontFamily: "var(--font-heading)", fontSize: 17, color: t.label === "Your Margin" ? TONES.green.fg : "var(--color-text)" }}>₹{t.value.toFixed(2)}</b>
+              </div>
+            ))}
+          </div>
+          <div>
+            <div style={{ fontSize: 12, fontWeight: 600, color: "var(--color-neutral-600)", marginBottom: 10 }}>Top campaigns by margin</div>
+            <div style={{ display: "grid", gap: 10 }}>
+              {topMargin.map((r) => (
+                <div key={r.c.id}>
+                  <div style={{ display: "flex", justifyContent: "space-between", fontSize: 12.5, marginBottom: 4 }}>
+                    <span style={{ fontWeight: 600 }}>{r.c.name} <span className="text-muted" style={{ fontWeight: 400 }}>· {r.c.userName}</span></span>
+                    <b className="tabnum" style={{ color: TONES.green.fg }}>₹{r.margin.toFixed(2)}</b>
+                  </div>
+                  <Bar pct={r.margin / maxMargin} color={TONES.green.hex} />
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </div>
