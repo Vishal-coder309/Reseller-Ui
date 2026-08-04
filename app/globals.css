@@ -271,7 +271,9 @@ details.adv[open] > summary::before { transform: rotate(90deg); }
 .org li::before, .org li::after { content: ""; position: absolute; top: 0; right: 50%; border-top: 2px solid var(--line); width: 50%; height: 26px; }
 .org li::after { right: auto; left: 50%; border-left: 2px solid var(--line); }
 .org li:only-child::before, .org li:only-child::after { display: none; }
-.org li:first-child::before, .org li:last-child::after { border-top: 0 none; }
+/* outer halves carry no lines at the row's ends — the elbow (::before with border-right) is the only drop for the last child */
+.org li:first-child::before { border-top: 0 none; }
+.org li:last-child::after { border: 0 none; }
 .org li:last-child::before { border-right: 2px solid var(--line); border-radius: 0 8px 0 0; }
 .org li:first-child::after { border-radius: 8px 0 0 0; }
 /* stub down from a parent node to its children rail */
