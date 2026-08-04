@@ -146,7 +146,7 @@ export default function Shell({ children }: { children: React.ReactNode }) {
         </header>
 
         <main style={{ flex: 1, padding: "30px 34px 64px" }}>
-          <div style={{ maxWidth: 1200, marginInline: "auto" }}>
+          <div>
             {viewingAs && (
               <div className="viewing-as">
                 <i className="ph-duotone ph-user-switch" style={{ fontSize: 18 }} />
