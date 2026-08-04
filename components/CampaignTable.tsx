@@ -13,10 +13,18 @@ export function CampaignSummary({ kind, showPrompt }: { kind: "live" | "prompt";
   // ponytail: seed campaigns aren't in the store — pause/resume/stop overrides are session-local
   const [override, setOverride] = useState<Record<number, CampaignStatus>>({});
   const [toast, setToast] = useState<string | null>(null);
+  // "Take Action" dropdown: fixed-position so it escapes the table's overflow scroll; flips up near the viewport bottom
+  const [menu, setMenu] = useState<{ id: number; left: number; y: number; up: boolean } | null>(null);
   const base = campaigns.filter((c) => c.kind === kind).map((c) => ({ ...c, status: override[c.id] ?? c.status }));
 
+  const toggleMenu = (id: number, e: React.MouseEvent<HTMLButtonElement>) => {
+    const rc = e.currentTarget.getBoundingClientRect();
+    const up = rc.bottom > window.innerHeight - 240;
+    setMenu((m) => (m && m.id === id ? null : { id, left: rc.right, up, y: up ? window.innerHeight - rc.top + 4 : rc.bottom + 4 }));
+  };
   const setCampaignStatus = (c: Campaign, s: CampaignStatus) => {
     setOverride((o) => ({ ...o, [c.id]: s }));
+    setMenu(null);
     setToast(`"${c.name}" ${s === "paused" ? "paused" : s === "running" ? "resumed" : "stopped"}.`);
   };
 
@@ -108,20 +116,19 @@ export function CampaignSummary({ kind, showPrompt }: { kind: "live" | "prompt";
                     <td className="num">{c.retryCount}</td>
                     <td className="num">{c.variableCount}</td>
                     <td className="text-muted">{c.pauseTime}</td>
-                    <td>
-                      <div style={{ display: "flex", alignItems: "center", gap: 2 }}>
-                        {c.status === "running" && (
-                          <button className="btn btn-icon" title="Pause" aria-label={`Pause ${c.name}`} onClick={() => setCampaignStatus(c, "paused")} style={{ width: 30, height: 30, color: "var(--color-neutral-600)" }}><i className="ph-duotone ph-pause-circle" style={{ fontSize: 18 }} /></button>
-                        )}
-                        {c.status === "paused" && (
-                          <button className="btn btn-icon" title="Resume" aria-label={`Resume ${c.name}`} onClick={() => setCampaignStatus(c, "running")} style={{ width: 30, height: 30, color: "#067a47" }}><i className="ph-duotone ph-play-circle" style={{ fontSize: 18 }} /></button>
-                        )}
-                        {(c.status === "running" || c.status === "paused" || c.status === "scheduled") && (
-                          <button className="btn btn-icon" title="Stop" aria-label={`Stop ${c.name}`} onClick={() => setCampaignStatus(c, "complete")} style={{ width: 30, height: 30, color: "var(--color-danger)" }}><i className="ph-duotone ph-stop-circle" style={{ fontSize: 18 }} /></button>
-                        )}
-                        <a href={`/campaigns/${c.id}`} className="btn btn-ghost" style={{ padding: "4px 8px" }}>View</a>
-                      </div>
-                    </td>
+                    <td><div style={{ position: "relative" }}>
+                      <button className="btn btn-secondary" onClick={(e) => toggleMenu(c.id, e)}>Take Action <i className="ph-duotone ph-caret-down" style={{ fontSize: 13 }} /></button>
+                      {menu && menu.id === c.id && (<>
+                        <div onClick={() => setMenu(null)} style={{ position: "fixed", inset: 0, zIndex: 40 }} />
+                        <div style={{ position: "fixed", left: menu.left, [menu.up ? "bottom" : "top"]: menu.y, transform: "translateX(-100%)", zIndex: 41, display: "flex", flexDirection: "column", width: 200, background: "var(--color-surface)", border: "1px solid var(--color-divider)", borderRadius: "var(--radius-md)", boxShadow: "var(--shadow-lg)", overflow: "hidden", padding: "5px 0" }}>
+                          {c.status === "running" && (<button className="btn btn-ghost" onClick={() => setCampaignStatus(c, "paused")} style={{ width: "100%", margin: 0, justifyContent: "flex-start", borderRadius: 0 }}><i className="ph-duotone ph-pause" style={{ fontSize: 16 }} /> Pause</button>)}
+                          {c.status === "paused" && (<button className="btn btn-ghost" onClick={() => setCampaignStatus(c, "running")} style={{ width: "100%", margin: 0, justifyContent: "flex-start", borderRadius: 0 }}><i className="ph-duotone ph-play" style={{ fontSize: 16 }} /> Resume</button>)}
+                          {(c.status === "running" || c.status === "paused" || c.status === "scheduled") && (<button className="btn btn-ghost" onClick={() => { if (window.confirm(`Stop "${c.name}"? This ends the campaign and cannot be undone.`)) setCampaignStatus(c, "complete"); }} style={{ width: "100%", margin: 0, justifyContent: "flex-start", borderRadius: 0, color: "var(--color-accent-2-700)" }}><i className="ph-duotone ph-stop" style={{ fontSize: 16 }} /> Stop</button>)}
+                          <button className="btn btn-ghost" onClick={() => { setMenu(null); setToast(`Report for "${c.name}" will be available in the Reports Section.`); }} style={{ width: "100%", margin: 0, justifyContent: "flex-start", borderRadius: 0 }}><i className="ph-duotone ph-file-arrow-down" style={{ fontSize: 16 }} /> Full Report</button>
+                          <a href={`/campaigns/${c.id}`} className="btn btn-ghost" style={{ width: "100%", margin: 0, justifyContent: "flex-start", borderRadius: 0 }}><i className="ph-duotone ph-eye" style={{ fontSize: 16 }} /> View Details</a>
+                        </div>
+                      </>)}
+                    </div></td>
                   </tr>
                 ))}
             </tbody>

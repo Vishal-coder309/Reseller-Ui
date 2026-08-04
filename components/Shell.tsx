@@ -44,7 +44,7 @@ export default function Shell({ children }: { children: React.ReactNode }) {
       <aside
         style={{
           width: 250, flex: "none", position: "sticky", top: 0, height: "100vh",
-          display: "flex", flexDirection: "column", background: "#0a1f44",
+          display: "flex", flexDirection: "column", background: "#091f44",
           borderRight: "1px solid rgba(255,255,255,0.09)",
         }}
       >
