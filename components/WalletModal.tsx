@@ -69,7 +69,7 @@ export default function WalletModal({ onClose }: { onClose: () => void }) {
   const stop = (e: React.MouseEvent) => e.stopPropagation();
 
   return (
-    <div onClick={onClose} className="modal-overlay" style={{ left: 250 }}>
+    <div onClick={onClose} className="modal-overlay offset">
       <div role="dialog" aria-modal="true" onClick={stop} className="modal-panel">
         <div className="modal-header" style={{ position: "sticky", top: 0, zIndex: 2 }}>
           <div>

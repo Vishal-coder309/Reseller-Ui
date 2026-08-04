@@ -44,7 +44,7 @@ export function Modal({ title, sub, onClose, children, actions }: { title: strin
     return () => document.removeEventListener("keydown", onKey);
   }, [onClose]);
   return (
-    <div className="modal-overlay" style={{ left: 250 }} onClick={onClose}>
+    <div className="modal-overlay offset" onClick={onClose}>
       <div className="modal-panel" role="dialog" aria-modal="true" onClick={(e) => e.stopPropagation()}>
         <div className="modal-header" style={{ position: "sticky", top: 0, zIndex: 2 }}>
           <div>

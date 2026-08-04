@@ -340,3 +340,22 @@ details.adv[open] > summary::before { transform: rotate(90deg); }
 @media (max-width: 1240px) { [data-cols] { grid-template-columns: repeat(2, 1fr) !important; } }
 @media (max-width: 1080px) { [data-split] { grid-template-columns: 1fr !important; } }
 @media (max-width: 720px) { [data-cols] { grid-template-columns: 1fr !important; } }
+
+/* ===== responsive shell: sidebar becomes a slide-in drawer below 900px ===== */
+.modal-overlay.offset { left: 250px; }
+.nav-toggle { display: none; }
+@media (max-width: 900px) {
+  .side {
+    position: fixed !important; left: 0; top: 0; bottom: 0; height: 100dvh !important;
+    transform: translateX(-100%); transition: transform .22s ease; z-index: 80;
+    box-shadow: var(--shadow-lg);
+  }
+  .side.open { transform: none; }
+  .side-backdrop { position: fixed; inset: 0; background: rgba(0, 41, 58, 0.45); z-index: 75; }
+  .nav-toggle { display: inline-flex; flex: none; }
+  .topbar { padding: 0 14px !important; }
+  .main-area { padding: 18px 14px 48px !important; }
+  .modal-overlay.offset { left: 0; }
+  .modal-overlay { padding: 10px; }
+  .modal-panel { height: 96vh; max-height: 96vh; border-radius: 14px; }
+}

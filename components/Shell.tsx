@@ -39,10 +39,13 @@ export default function Shell({ children }: { children: React.ReactNode }) {
   const [notifOpen, setNotifOpen] = useState(false);
   const [notifRead, setNotifRead] = useState(false);
   const [supportOpen, setSupportOpen] = useState(false);
+  const [mobileNav, setMobileNav] = useState(false);
 
   return (
     <div style={{ minHeight: "100vh", display: "flex" }}>
+      {mobileNav && <div className="side-backdrop" onClick={() => setMobileNav(false)} />}
       <aside
+        className={`side${mobileNav ? " open" : ""}`}
         style={{
           width: 250, flex: "none", position: "sticky", top: 0, height: "100vh",
           display: "flex", flexDirection: "column", background: "#091f44",
@@ -66,6 +69,7 @@ export default function Shell({ children }: { children: React.ReactNode }) {
               <Link
                 key={it.href}
                 href={it.href}
+                onClick={() => setMobileNav(false)}
                 style={{
                   display: "flex", alignItems: "center", gap: 11, padding: "10px 11px",
                   borderRadius: "var(--radius-md)", marginBottom: 3, fontSize: 13.5,
@@ -110,7 +114,10 @@ export default function Shell({ children }: { children: React.ReactNode }) {
       </aside>
 
       <div style={{ flex: 1, minWidth: 0, display: "flex", flexDirection: "column" }}>
-        <header style={{ position: "sticky", top: 0, zIndex: 20, height: 64, display: "flex", alignItems: "center", gap: 16, padding: "0 34px", background: "color-mix(in srgb, var(--color-bg) 86%, transparent)", backdropFilter: "blur(8px)", borderBottom: "1px solid var(--color-divider)" }}>
+        <header className="topbar" style={{ position: "sticky", top: 0, zIndex: 20, height: 64, display: "flex", alignItems: "center", gap: 16, padding: "0 34px", background: "color-mix(in srgb, var(--color-bg) 86%, transparent)", backdropFilter: "blur(8px)", borderBottom: "1px solid var(--color-divider)" }}>
+          <button className="btn btn-icon nav-toggle" aria-label="Open menu" onClick={() => setMobileNav(true)} style={{ color: "var(--color-neutral-700)" }}>
+            <i className="ph-duotone ph-list" style={{ fontSize: 22 }} />
+          </button>
           <div style={{ position: "relative", flex: 1, maxWidth: 400 }}>
             <i className="ph-duotone ph-magnifying-glass" style={{ position: "absolute", left: 12, top: "50%", transform: "translateY(-50%)", color: "var(--color-neutral-500)", fontSize: 17 }} />
             <input className="input" style={{ paddingLeft: 36, height: 38, borderRadius: 999 }} placeholder="Search users, campaigns…" aria-label="Search" />
@@ -145,7 +152,7 @@ export default function Shell({ children }: { children: React.ReactNode }) {
           </div>
         </header>
 
-        <main style={{ flex: 1, padding: "30px 34px 64px" }}>
+        <main className="main-area" style={{ flex: 1, padding: "30px 34px 64px" }}>
           <div>
             {viewingAs && (
               <div className="viewing-as">
@@ -164,7 +171,7 @@ export default function Shell({ children }: { children: React.ReactNode }) {
       {walletOpen && <WalletModal onClose={() => setWalletOpen(false)} />}
 
       {supportOpen && (
-        <div onClick={() => setSupportOpen(false)} className="modal-overlay" style={{ left: 250 }}>
+        <div onClick={() => setSupportOpen(false)} className="modal-overlay offset">
           <div role="dialog" aria-modal="true" onClick={(e) => e.stopPropagation()} className="modal-panel" style={{ overflow: "hidden" }}>
             <div className="modal-header">
               <h3 className="modal-title">Help &amp; support</h3>
