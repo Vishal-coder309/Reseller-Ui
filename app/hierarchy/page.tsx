@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
 import { useStore } from "@/lib/store";
 import { RESELLER, User } from "@/lib/mock-data";
@@ -12,10 +13,17 @@ const AVATARS = [
 ];
 const fmt = (n: number) => n.toLocaleString("en-IN");
 
-function NodeCard({ u }: { u: User }) {
+function NodeCard({ u, hit, dim }: { u: User; hit: boolean; dim: boolean }) {
   const reseller = u.type === "reseller";
   return (
-    <div className="org-node" style={reseller ? { borderTop: "3px solid #7a5cff" } : { borderTop: "3px solid #00b8ff" }}>
+    <div
+      className="org-node"
+      style={{
+        borderTop: `3px solid ${reseller ? "#7a5cff" : "#00b8ff"}`,
+        ...(hit ? { boxShadow: "0 0 0 3px rgba(0,184,255,0.45), var(--shadow-md)", borderColor: "var(--color-accent)" } : undefined),
+        ...(dim ? { opacity: 0.3, filter: "grayscale(0.4)" } : undefined),
+      }}
+    >
       <span style={{ width: 34, height: 34, borderRadius: "50%", background: AVATARS[u.id % AVATARS.length], color: "#fff", display: "grid", placeItems: "center", fontFamily: "var(--font-heading)", fontWeight: 700, fontSize: 12 }}>
         {u.username.slice(0, 2).toUpperCase()}
       </span>
@@ -29,9 +37,14 @@ function NodeCard({ u }: { u: User }) {
 
 export default function Hierarchy() {
   const { users } = useStore();
+  const [query, setQuery] = useState("");
   const childrenOf = (username: string) => users.filter((u) => u.parent === username);
   const totalUsers = users.filter((u) => u.type === "user").length;
   const totalResellers = users.filter((u) => u.type === "reseller").length;
+
+  const q = query.trim().toLowerCase();
+  const matches = (u: User) => !!q && (u.username.toLowerCase().includes(q) || u.name.toLowerCase().includes(q) || u.company.toLowerCase().includes(q));
+  const hits = q ? users.filter(matches).length : 0;
 
   const renderChildren = (username: string) => {
     const kids = childrenOf(username);
@@ -40,7 +53,7 @@ export default function Hierarchy() {
       <ul>
         {kids.map((u) => (
           <li key={u.id}>
-            <NodeCard u={u} />
+            <NodeCard u={u} hit={matches(u)} dim={!!q && !matches(u)} />
             {renderChildren(u.username)}
           </li>
         ))}
@@ -52,15 +65,22 @@ export default function Hierarchy() {
     <>
       <PageHead kicker="Users" title="Account Hierarchy" />
       <div className="card" style={{ overflowX: "auto" }}>
-        <div style={{ display: "flex", gap: 18, alignItems: "center", justifyContent: "center", padding: "14px 18px 0", fontSize: 12, color: "var(--color-neutral-600)", flexWrap: "wrap" }}>
-          <span style={{ display: "inline-flex", alignItems: "center", gap: 6 }}><span style={{ width: 10, height: 10, borderRadius: 3, background: "#7a5cff" }} /> Reseller — manages accounts of their own</span>
-          <span style={{ display: "inline-flex", alignItems: "center", gap: 6 }}><span style={{ width: 10, height: 10, borderRadius: 3, background: "#00b8ff" }} /> User — runs campaigns</span>
-          <span className="text-muted">Lines show who manages whom · click a name to edit</span>
+        <div style={{ display: "flex", gap: 16, alignItems: "center", padding: "14px 18px 0", flexWrap: "wrap" }}>
+          <div style={{ position: "relative", width: 280, flex: "none" }}>
+            <i className="ph-duotone ph-magnifying-glass" style={{ position: "absolute", left: 11, top: "50%", transform: "translateY(-50%)", color: "var(--color-neutral-500)", fontSize: 16 }} />
+            <input className="input" style={{ paddingLeft: 34, borderRadius: 999 }} placeholder="Find a user or reseller…" aria-label="Search hierarchy" value={query} onChange={(e) => setQuery(e.target.value)} />
+          </div>
+          {q && <span style={{ fontSize: 12.5, fontWeight: 600, color: hits ? "var(--color-accent-700)" : "var(--color-danger)" }}>{hits ? `${hits} match${hits > 1 ? "es" : ""} highlighted` : "No accounts match"}</span>}
+          <div style={{ marginLeft: "auto", display: "flex", gap: 16, alignItems: "center", fontSize: 12, color: "var(--color-neutral-600)", flexWrap: "wrap" }}>
+            <span style={{ display: "inline-flex", alignItems: "center", gap: 6 }}><span style={{ width: 10, height: 10, borderRadius: 3, background: "#7a5cff" }} /> Reseller</span>
+            <span style={{ display: "inline-flex", alignItems: "center", gap: 6 }}><span style={{ width: 10, height: 10, borderRadius: 3, background: "#00b8ff" }} /> User</span>
+            <span className="text-muted">Lines show who manages whom</span>
+          </div>
         </div>
         <ul className="org">
           <li>
             {/* root: you */}
-            <div className="org-node" style={{ background: "#091f44", border: "none", width: 172, padding: "14px 12px 12px" }}>
+            <div className="org-node" style={{ background: "#091f44", border: "none", width: 172, padding: "14px 12px 12px", ...(q ? { opacity: 0.55 } : undefined) }}>
               <span style={{ width: 44, height: 44, borderRadius: "50%", background: "linear-gradient(135deg,#00b8ff,#4fd0ff)", color: "#00344b", display: "grid", placeItems: "center", fontFamily: "var(--font-heading)", fontWeight: 700, fontSize: 14 }}>
                 {RESELLER.name.split(" ").map((w) => w[0]).join("").slice(0, 2).toUpperCase()}
               </span>
