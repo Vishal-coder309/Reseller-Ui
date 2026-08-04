@@ -238,6 +238,15 @@ details.adv[open] > summary::before { transform: rotate(90deg); }
 [data-split] > * { min-width: 0; }
 .hoverable-accent:hover { border-color: var(--color-accent) !important; background: var(--color-accent-100); }
 
+/* info-tip: hover/focus popover behind an (i) icon (ported from UI-Design) */
+.info-tip { position: relative; display: inline-flex; }
+.info-tip .info-tip-pop {
+  display: none; position: absolute; top: calc(100% + 8px); left: -6px; width: 360px;
+  background: var(--color-surface); border: 1px solid var(--color-divider); border-radius: var(--radius-md);
+  box-shadow: var(--shadow-md); padding: 12px 14px; z-index: 40; font-size: 12.5px; line-height: 1.5; font-weight: 400;
+}
+.info-tip:hover .info-tip-pop, .info-tip:focus-within .info-tip-pop { display: block; }
+
 /* ===== popover ===== */
 .pop-wrap { position: relative; display: inline-block; }
 .popover {

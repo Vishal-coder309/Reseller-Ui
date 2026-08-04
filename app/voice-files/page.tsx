@@ -18,17 +18,21 @@ export default function VoiceFiles() {
     <>
       <PageHead kicker="Voice Library" title="Voice Files" />
 
-      <div className="banner warn">
-        <i className="ph-duotone ph-shield-warning" style={{ fontSize: 18, flex: "none", marginTop: 1 }} />
-        <div>
-          <b>Restricted Voice Content</b> — the following are rejected on review: {RESTRICTED.map((r, i) => (
-            <span key={i}>{i > 0 ? "; " : " "}{r}</span>
-          ))}.
-        </div>
-      </div>
-
       <div className="card">
-        <div className="card-head"><div><h3>Voice Files</h3><div className="sub">{voiceFiles.length} files</div></div></div>
+        <div className="card-head"><div>
+          <h3 style={{ display: "inline-flex", alignItems: "center", gap: 7 }}>Voice Files
+            <span className="info-tip" tabIndex={0} aria-label="Restricted voice content policy">
+              <i className="ph-duotone ph-info" style={{ fontSize: 17, color: "var(--color-accent-2-700)", cursor: "help" }} />
+              <span className="info-tip-pop">
+                <b>Restricted Voice Content</b> — the following are rejected on review:
+                <ul style={{ margin: "6px 0 0", paddingLeft: 18 }}>
+                  {RESTRICTED.map((r) => <li key={r}>{r}</li>)}
+                </ul>
+              </span>
+            </span>
+          </h3>
+          <div className="sub">{voiceFiles.length} files</div>
+        </div></div>
         <div className="table-wrap">
           <table className="table">
             <thead><tr>
