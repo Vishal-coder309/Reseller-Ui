@@ -94,14 +94,14 @@ export function CampaignSummary({ kind, userWise }: { kind: "live" | "prompt"; u
               <th><input type="checkbox" checked={allChecked} onChange={() => setSelected(allChecked ? new Set() : new Set(rows.map((r) => r.id)))} /></th>
               <th>Campaign Id</th><th>Name</th><th>User</th><th>Parent</th><th>Status</th><th className="num">Channels</th><th>Type</th>
               <th>Start</th><th>End</th><th className="num">Numbers</th><th className="num">Dialed</th><th className="num">Pending</th><th className="num">Connected</th>
-              <th className="num">Pulses</th><th className="num">DnD</th><th className="num">DTMF</th><th className="num">SMS</th><th className="num">Retry</th><th className="num">Vars</th><th>Pause</th>
+              <th className="num">Pulses</th><th className="num">DnD</th><th className="num">DTMF</th><th className="num">SMS</th><th className="num">Retry</th><th className="num">Vars</th>
             </tr></thead>
             <tbody>
-              {rows.length === 0 ? <EmptyRow colSpan={21} icon="ph-broadcast" message="No campaigns match this filter." /> :
+              {rows.length === 0 ? <EmptyRow colSpan={20} icon="ph-broadcast" message="No campaigns match this filter." /> :
                 rows.map((c, i) => (
                   <Fragment key={c.id}>
                     {userWise && (i === 0 || rows[i - 1].userName !== c.userName) && (
-                      <tr><td colSpan={21} style={{ background: "var(--color-bg)", fontWeight: 600, fontFamily: "var(--font-heading)", fontSize: 13 }}>
+                      <tr><td colSpan={20} style={{ background: "var(--color-bg)", fontWeight: 600, fontFamily: "var(--font-heading)", fontSize: 13 }}>
                         <i className="ph-duotone ph-user-circle" style={{ fontSize: 16, verticalAlign: "-3px", color: "var(--color-accent-700)", marginRight: 7 }} />
                         {c.userName} <span className="text-muted" style={{ fontWeight: 400 }}>· {rows.filter((r) => r.userName === c.userName).length} campaign{rows.filter((r) => r.userName === c.userName).length > 1 ? "s" : ""}</span>
                       </td></tr>
@@ -132,7 +132,6 @@ export function CampaignSummary({ kind, userWise }: { kind: "live" | "prompt"; u
                     <td className="num">{c.smsCount}</td>
                     <td className="num">{c.retryCount}</td>
                     <td className="num">{c.variableCount}</td>
-                    <td className="text-muted">{c.pauseTime}</td>
                   </tr>
                   </Fragment>
                 ))}
