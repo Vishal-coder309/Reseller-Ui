@@ -92,7 +92,7 @@ export function CampaignSummary({ kind, userWise }: { kind: "live" | "prompt"; u
           <table className="table">
             <thead><tr>
               <th><input type="checkbox" checked={allChecked} onChange={() => setSelected(allChecked ? new Set() : new Set(rows.map((r) => r.id)))} /></th>
-              <th>Campaign Id</th><th>Name</th><th>User</th><th>Parent</th><th>Status</th><th className="num">Channels</th><th>Type</th>
+              <th>Campaign Id</th><th>Name</th><th>User</th><th>Parent</th><th>Status</th><th>Product</th><th>Type</th>
               <th>Start</th><th>End</th><th className="num">Numbers</th><th className="num">Dialed</th><th className="num">Pending</th><th className="num">Connected</th>
               <th className="num">Pulses</th><th className="num">DnD</th><th className="num">DTMF</th><th className="num">SMS</th><th className="num">Retry</th><th className="num">Vars</th>
             </tr></thead>
@@ -118,7 +118,7 @@ export function CampaignSummary({ kind, userWise }: { kind: "live" | "prompt"; u
                     <td>{c.userName}</td>
                     <td className="text-muted">{c.parentUsername}</td>
                     <td><StatusPill status={c.status} /></td>
-                    <td className="num">{c.channels}</td>
+                    <td className="text-muted tabnum">{c.pulseDuration}s</td>
                     <td className="text-muted">{c.type}</td>
                     <td className="tabnum">{c.startTime}</td>
                     <td className="tabnum">{c.endTime}</td>
