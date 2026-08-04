@@ -199,6 +199,44 @@ details.adv[open] > summary::before { transform: rotate(90deg); }
 .modal-body { padding: 22px; }
 .modal-actions { display: flex; justify-content: flex-end; gap: 10px; padding: 0 22px 20px; }
 
+/* ===== full popup chrome (ported from UI-Design: navy hero header, uniform panel) ===== */
+.modal-overlay {
+  position: fixed; inset: 0; z-index: 60; padding: 24px;
+  background: rgba(0, 41, 58, 0.42);
+  backdrop-filter: blur(5px); -webkit-backdrop-filter: blur(5px);
+  display: grid; place-items: center;
+}
+.modal-panel {
+  /* uniform popup window: every full popup renders at the same size regardless of content */
+  width: 100%; max-width: 1000px; height: 94vh; max-height: 94vh;
+  display: flex; flex-direction: column; overflow-x: hidden;
+  background: var(--color-surface);
+  border-radius: 20px;
+  box-shadow: var(--shadow-lg);
+}
+.modal-panel .btn { border-radius: 999px; }
+.modal-header {
+  display: flex; align-items: flex-start; justify-content: space-between; gap: 14px;
+  padding: 30px 28px 20px;
+  background: #091f44;
+}
+.modal-title { font-family: var(--font-heading); font-size: 24px; font-weight: 600; letter-spacing: -.02em; margin: 0; color: #fff; line-height: 1.2; }
+.modal-sub { font-size: 13px; color: rgba(255, 255, 255, .66); margin: 6px 0 0; }
+.modal-close {
+  width: 40px; height: 40px; flex: none; border: none; border-radius: 50%;
+  background: var(--color-neutral-200); color: var(--color-neutral-600);
+  display: grid; place-items: center; cursor: pointer; font-size: 18px;
+  transition: background .15s ease, color .15s ease;
+}
+.modal-close:hover { background: var(--color-neutral-300); color: var(--color-neutral-800); }
+/* the panel body is the scroll region — header stays put (scoped so the small .modal keeps its own .modal-body) */
+.modal-panel .modal-body { padding: 8px 26px 24px; overflow-y: auto; min-height: 0; flex: 1; background: var(--color-accent-100); scrollbar-color: var(--color-neutral-300) transparent; }
+.modal-panel .modal-body::-webkit-scrollbar { width: 10px; }
+.modal-panel .modal-body::-webkit-scrollbar-track { background: transparent; }
+.modal-panel .modal-body::-webkit-scrollbar-thumb { background: var(--color-neutral-300); border-radius: 999px; border: 2px solid transparent; background-clip: content-box; }
+[data-split] > * { min-width: 0; }
+.hoverable-accent:hover { border-color: var(--color-accent) !important; background: var(--color-accent-100); }
+
 /* ===== popover ===== */
 .pop-wrap { position: relative; display: inline-block; }
 .popover {

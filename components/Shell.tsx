@@ -5,6 +5,13 @@ import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { useStore } from "@/lib/store";
 import { RESELLER } from "@/lib/mock-data";
+import WalletModal from "@/components/WalletModal";
+
+const NOTIFS = [
+  { icon: "ph-check-circle", color: "#12b76a", bg: "#e7f7ef", title: "Recharge complete", sub: "vishal_voice credited with ₹500 voice balance.", time: "12 min ago" },
+  { icon: "ph-user-plus", color: "#0a6d95", bg: "#e2f6ff", title: "New user created", sub: "acme_calls was added under your account.", time: "2 h ago" },
+  { icon: "ph-wallet", color: "#f2a900", bg: "#fdf6e3", title: "Low voice balance", sub: "Your voice wallet is running low — top up to keep user recharges flowing.", time: "Yesterday" },
+];
 
 interface NavItem { href: string; label: string; icon: string; }
 
@@ -27,6 +34,10 @@ export default function Shell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const { voiceBalance, ttsBalance, viewingAs, setViewingAs } = useStore();
   const [menuOpen, setMenuOpen] = useState(false);
+  const [walletOpen, setWalletOpen] = useState(false);
+  const [notifOpen, setNotifOpen] = useState(false);
+  const [notifRead, setNotifRead] = useState(false);
+  const [supportOpen, setSupportOpen] = useState(false);
 
   return (
     <div style={{ minHeight: "100vh", display: "flex" }}>
@@ -72,7 +83,7 @@ export default function Shell({ children }: { children: React.ReactNode }) {
         </nav>
 
         <div style={{ padding: "0 12px 4px" }}>
-          <button style={{ display: "flex", alignItems: "center", gap: 10, width: "100%", padding: "9px 11px", borderRadius: "var(--radius-md)", background: "none", border: "none", cursor: "pointer", color: "rgba(255,255,255,0.80)", fontSize: 13, fontFamily: "var(--font-body)", textAlign: "left" }}>
+          <button onClick={() => { setSupportOpen(true); setMenuOpen(false); }} style={{ display: "flex", alignItems: "center", gap: 10, width: "100%", padding: "9px 11px", borderRadius: "var(--radius-md)", background: "none", border: "none", cursor: "pointer", color: "rgba(255,255,255,0.80)", fontSize: 13, fontFamily: "var(--font-body)", textAlign: "left" }}>
             <i className="ph-duotone ph-question" style={{ fontSize: 18, color: "rgba(255,255,255,0.7)", flex: "none" }} /> <span style={{ flex: 1 }}>Help &amp; support</span>
           </button>
         </div>
@@ -110,10 +121,32 @@ export default function Shell({ children }: { children: React.ReactNode }) {
             <div style={{ display: "flex", alignItems: "center", gap: 7, height: 34, padding: "0 13px", borderRadius: 999, background: "var(--color-accent-2-100)", color: "var(--color-accent-2-800)", fontSize: 13 }}>
               <i className="ph-duotone ph-chat-text" style={{ fontSize: 15 }} /> TTS <b className="tabnum">₹{ttsBalance}</b>
             </div>
-            <button className="btn btn-icon" aria-label="Notifications" style={{ color: "var(--color-neutral-600)", position: "relative" }}>
-              <i className="ph-duotone ph-bell" style={{ fontSize: 19 }} />
-              <span style={{ position: "absolute", top: 8, right: 8, width: 7, height: 7, borderRadius: "50%", background: "var(--color-accent-2)" }} />
-            </button>
+            <button className="btn btn-primary" onClick={() => setWalletOpen(true)}><i className="ph-duotone ph-wallet" style={{ fontSize: 16 }} /> Wallet</button>
+            <div style={{ position: "relative" }}>
+              <button className="btn btn-icon" aria-label="Notifications" aria-expanded={notifOpen} onClick={() => setNotifOpen((o) => !o)} style={{ color: "var(--color-neutral-600)", position: "relative" }}>
+                <i className="ph-duotone ph-bell" style={{ fontSize: 19 }} />
+                {!notifRead && <span style={{ position: "absolute", top: 8, right: 8, width: 7, height: 7, borderRadius: "50%", background: "var(--color-danger)" }} />}
+              </button>
+              {notifOpen && (<>
+                <div style={{ position: "fixed", inset: 0, zIndex: 30 }} onClick={() => setNotifOpen(false)} />
+                <div style={{ position: "absolute", top: "calc(100% + 10px)", right: 0, width: 390, zIndex: 31, background: "var(--color-surface)", border: "1px solid var(--color-divider)", borderRadius: 16, boxShadow: "var(--shadow-lg)", overflow: "hidden" }}>
+                  <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 10, padding: "14px 18px", borderBottom: "1px solid var(--color-divider)" }}>
+                    <div style={{ fontFamily: "var(--font-heading)", fontSize: 14.5, fontWeight: 600 }}>Notifications</div>
+                    {!notifRead && (<button onClick={() => setNotifRead(true)} style={{ border: "none", background: "none", padding: 0, fontSize: 12, fontWeight: 600, color: "var(--color-accent-700)", cursor: "pointer", fontFamily: "inherit" }}>Mark all as read</button>)}
+                  </div>
+                  {NOTIFS.map((n, i) => (
+                    <div key={i} style={{ display: "flex", gap: 12, alignItems: "flex-start", padding: "13px 18px", borderBottom: i < NOTIFS.length - 1 ? "1px solid var(--color-divider)" : undefined, background: !notifRead ? "color-mix(in srgb, var(--color-accent-100) 55%, transparent)" : undefined }}>
+                      <div style={{ width: 36, height: 36, flex: "none", borderRadius: "50%", background: n.bg, color: n.color, display: "grid", placeItems: "center" }}><i className={"ph-duotone " + n.icon} style={{ fontSize: 18 }} /></div>
+                      <div style={{ minWidth: 0 }}>
+                        <div style={{ display: "flex", alignItems: "center", gap: 7, fontSize: 13, fontWeight: 600, color: "#091f44" }}>{n.title}{!notifRead && <span style={{ width: 6, height: 6, flex: "none", borderRadius: "50%", background: "var(--color-danger)" }} />}</div>
+                        <div style={{ fontSize: 12.5, color: "var(--color-neutral-600)", lineHeight: 1.45, marginTop: 2 }}>{n.sub}</div>
+                        <div style={{ fontSize: 11.5, color: "var(--color-neutral-500)", marginTop: 4 }}>{n.time}</div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </>)}
+            </div>
           </div>
         </header>
 
@@ -132,6 +165,33 @@ export default function Shell({ children }: { children: React.ReactNode }) {
           </div>
         </main>
       </div>
+
+      {walletOpen && <WalletModal onClose={() => setWalletOpen(false)} />}
+
+      {supportOpen && (
+        <div onClick={() => setSupportOpen(false)} className="modal-overlay" style={{ left: 250 }}>
+          <div role="dialog" aria-modal="true" onClick={(e) => e.stopPropagation()} className="modal-panel" style={{ overflow: "hidden" }}>
+            <div className="modal-header">
+              <h3 className="modal-title">Help &amp; support</h3>
+              <button className="modal-close" aria-label="Close" onClick={() => setSupportOpen(false)}><i className="ph-duotone ph-x" /></button>
+            </div>
+            <div className="modal-body" style={{ padding: "20px 22px", display: "flex", flexDirection: "column", gap: 12 }}>
+              <a className="hoverable-accent" href={`mailto:${RESELLER.email}`} style={{ display: "flex", alignItems: "center", gap: 12, border: "1px solid var(--color-divider)", borderRadius: "var(--radius-md)", padding: "13px 15px", textDecoration: "none", color: "var(--color-text)", background: "var(--color-surface)" }}>
+                <i className="ph-duotone ph-envelope-simple" style={{ fontSize: 20, color: "var(--color-accent-700)", flex: "none" }} />
+                <div><div style={{ fontWeight: 600, fontSize: 13.5, fontFamily: "var(--font-heading)" }}>Email support</div><div style={{ fontSize: 12, color: "var(--color-neutral-600)" }}>{RESELLER.email}</div></div>
+              </a>
+              <a className="hoverable-accent" href="tel:18001234567" style={{ display: "flex", alignItems: "center", gap: 12, border: "1px solid var(--color-divider)", borderRadius: "var(--radius-md)", padding: "13px 15px", textDecoration: "none", color: "var(--color-text)", background: "var(--color-surface)" }}>
+                <i className="ph-duotone ph-headset" style={{ fontSize: 20, color: "var(--color-accent-700)", flex: "none" }} />
+                <div><div style={{ fontWeight: 600, fontSize: 13.5, fontFamily: "var(--font-heading)" }}>Call platform support</div><div style={{ fontSize: 12, color: "var(--color-neutral-600)" }}>1800 123 4567 · Mon–Sat, 9–7</div></div>
+              </a>
+              <div style={{ display: "flex", alignItems: "center", gap: 12, border: "1px solid var(--color-divider)", borderRadius: "var(--radius-md)", padding: "13px 15px", background: "var(--color-surface)" }}>
+                <i className="ph-duotone ph-info" style={{ fontSize: 20, color: "var(--color-accent-700)", flex: "none" }} />
+                <div><div style={{ fontWeight: 600, fontSize: 13.5, fontFamily: "var(--font-heading)" }}>Account</div><div style={{ fontSize: 12, color: "var(--color-neutral-600)" }}>{RESELLER.company} · {RESELLER.name} (Reseller)</div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
